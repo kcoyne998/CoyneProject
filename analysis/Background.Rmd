@@ -1,0 +1,44 @@
+---
+title: "Background"
+output:
+  workflowr::wflow_html:
+    toc: FALSE
+    self_contained: no
+    df_print: tibble
+    theme: spacelab
+    code_folding: show
+editor_options:
+  chunk_output_type: console
+---
+
+# Purpose
+
+The Prediction of phenotypes is an essential aspect of studying genetics and recently there has been an influx in trying to optimize the methodology utilized for prediction. The purpose of this study is to compare the results of a univariate prediction method and a multivariate prediction method and determine if there is advantages to the multivariate method when the phenotypes are confirmed to be correlated. 
+
+## Study outlining gblub
+
+To outline the strategy for phenotypic estimation is it important to discuss the statistical practices being utilized. For this project the best way to outline the mathematical strategy is to describe the R package that was utilized for the data analysis, qgg. The qgg package provides genomic modeling approaches, including Genomic Best Linear Unbiased Prediction (GBLUB) and MultiVariate Genomic Best Linear Unbiased Prediction (MVGBLUB). By inputting single nucleotide polymorphisms (SNPs) matrix data the  program is able to conduct univariate and multivariate analysis and save various data points such as prediction accuracy, heritability, and trait correlation. 
+Although the MVGBLUB has not been widely utilized in research yet, GBLUB has been proven accurate in predicting traits and heritability. In this study the model took the approach of finding patterns in marker statistics to show a relationship between the genome and a trait. The markers were taken from the DGRP SNPs genotyping arrays. Testing using SNPs are known as market set tests, which allow the genomic analysis to be rapid and enriched for causal variants, creating an optimized prediction model. The extension of GBLUB to multivariate analysis has been tested before and proven useful and accurate.1
+
+
+## Heritability
+
+Heritability becomes an important value in this study being the upper limit of the possible prediction accuracy of the program. Genomic heritability is the estimate of the variance explained by SNPs, and this estimate is calculated using mixed models and looks at the various small effects of SNPS for the rationalization of a phenotype. By quantifying the heritability it creates the means to create a mixed model for the amount of genomic information relative to the phenotype being evaluated. There is also a way to find the prediction accuracy as a function of the total number of SNPs. The ration for this calculation is the population size over the total number of SNPs. This shows that a high heritability does not mean the prediction will be accurate, but the values are related.2
+
+
+## UNV vs multivariate
+
+The main purpose of this study was to evaluate the prediction accuracy of univariate analysis against the accuracy of multivariate analysis. This concept has been explored before in a study evaluating the univariate and multivariate prediction model accuracies for African cassava.3 In that study the multivariate model was more accurate in predicting phenotypes for a scenario that took into account gene-environment interactions as well as for a scenario that did not. 
+
+
+
+Sørensen, I.F., Edwards, S.M., Rohde, P.D. et al. Multiple Trait Covariance Association Test Identifies Gene Ontology Categories Associated with Chill Coma Recovery Time in Drosophila melanogaster . Sci Rep 7, 2413 (2017). https://doi.org/10.1038/s41598-017-02281-3
+Frouin A, Dandine-Roulland C, Pierre-Jean M, Deleuze JF, Ambroise C, Le Floch E. Exploring the Link Between Additive Heritability and Prediction Accuracy From a Ridge Regression Perspective. Front Genet. 2020 Nov 4;11:581594. doi: 10.3389/fgene.2020.581594. PMID: 33329721; PMCID: PMC7672157.
+Okeke, U.G., Akdemir, D., Rabbi, I. et al. Accuracies of univariate and multivariate genomic prediction models in African cassava. Genet Sel Evol 49, 88 (2017). https://doi.org/10.1186/s12711-017-0361-y
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+

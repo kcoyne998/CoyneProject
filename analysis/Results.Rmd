@@ -1,0 +1,437 @@
+---
+title: Boxplot Results
+date: “2022-02-28"
+output:
+  workflowr::wflow_html:
+    toc: FALSE
+    self_contained: no
+    df_print: tibble
+    theme: spacelab
+    code_folding: show
+    css: style.css
+
+editor_options:
+  chunk_output_type: console
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## About
+The boxplots below separated the data sets by sex and did univariate and multivariate analysis of the lifespans of the drosophila in three separate temperature conditions: 18C, 25C, and 28C. Within the plots the boxplots are grouped by temperature for univariate and multivariate analysis. The values of the boxplot consist of 50 observations of the R squared values. Within the boxplots the red diamond shows the mean of the R squared values and the blue line shows the mean of 50 observations of the heritability values. The Female heritability Plot is first followed by the Male heritability Plot. 
+
+## Female and Male heritability Plots
+```{r}
+library(ggplot2)
+
+###Reading in results
+female_res <- readRDS("/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_h2_female.rds")
+male_res <- readRDS("/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_h2_male.rds")
+
+###Female r2 data loaded into one file, then seperated and made into data frames
+female_r2 <- list(female_r2_gblup=female_res$r2_gblup_FEMALE, female_r2_mvgblup=female_res$r2_mvgblup_FEMALE)
+female_r2_gblub <- female_r2$female_r2_gblup
+female_r2_gblub <- as.data.frame(female_r2_gblub)
+female_r2_mvgblub <- female_r2$female_r2_mvgblup
+female_r2_mvgblub <- as.data.frame(female_r2_mvgblub)
+female_r2_data <- merge(female_r2_gblub, female_r2_mvgblub, by = 0)
+rownames(female_r2_data) <- female_r2_data[,1]
+female_r2_data <- female_r2_data[,-1]
+colnames(female_r2_data) <- c('Female_18c_uni','Female_25c_uni','Female_28c_uni','Female_18c_multi','Female_25c_multi','Female_28c_multi')
+female_r2_data <- female_r2_data[, c(1,4,2,5,3,6)]
+
+
+###Male r2 data loaded into one file, then seperated and made into data frames
+male_r2 <- list(male_r2_gblup=male_res$r2_gblup_MALE, male_r2_mvgblup=male_res$r2_mvgblup_MALE)
+male_r2_gblub <- male_r2$male_r2_gblup
+male_r2_gblub <- as.data.frame(male_r2_gblub)
+male_r2_mvgblub <- male_r2$male_r2_mvgblup
+male_r2_mvgblub <- as.data.frame(male_r2_mvgblub)
+male_r2_data <- merge(male_r2_gblub, male_r2_mvgblub, by = 0)
+rownames(male_r2_data) <- male_r2_data[,1]
+male_r2_data <- male_r2_data[,-1]
+colnames(male_r2_data) <- c('Male_18c_uni','Male_25c_uni','Male_28c_uni','Male_18c_multi','Male_25c_multi','Male_28c_multi')
+male_r2_data <- male_r2_data[, c(1,4,2,5,3,6)]
+
+
+###Female h2 data loaded into one file, then seperated and made into data frames
+female_h2 <- list(female_h2_gblup=female_res$h2_gblup_FEMALE, female_h2_mvgblup=female_res$h2_mvgblup_FEMALE)
+female_h2_gblub <- female_h2$female_h2_gblup
+female_h2_gblub <- as.data.frame(female_h2_gblub)
+female_h2_mvgblub <- female_h2$female_h2_mvgblup
+female_h2_mvgblub <- as.data.frame(female_h2_mvgblub)
+female_h2_data <- merge(female_h2_gblub, female_h2_mvgblub, by = 0)
+rownames(female_h2_data) <- female_h2_data[,1]
+female_h2_data <- female_h2_data[,-1]
+colnames(female_h2_data) <- c('Female_18c_uni','Female_25c_uni','Female_28c_uni','Female_18c_multi','Female_25c_multi','Female_28c_multi')
+female_h2_data <- female_h2_data[, c(1,4,2,5,3,6)]
+
+
+
+###Male h2 data loaded into one file, then seperated and made into data frames
+male_h2 <- list(male_h2_gblup=male_res$h2_gblup_MALE, male_h2_mvgblup=male_res$h2_mvgblup_MALE)
+male_h2_gblub <- male_h2$male_h2_gblup
+male_h2_gblub <- as.data.frame(male_h2_gblub)
+male_h2_mvgblub <- male_h2$male_h2_mvgblup
+male_h2_mvgblub <- as.data.frame(male_h2_mvgblub)
+male_h2_data <- merge(male_h2_gblub, male_h2_mvgblub, by = 0)
+rownames(male_h2_data) <- male_h2_data[,1]
+male_h2_data <- male_h2_data[,-1]
+colnames(male_h2_data) <- c('Male_18c_uni','Male_25c_uni','Male_28c_uni','Male_18c_multi','Male_25c_multi','Male_28c_multi')
+male_h2_data <- male_h2_data[, c(1,4,2,5,3,6)]
+
+
+###Finding average of female r2 data
+female_r2_means <- (colMeans(female_r2_data, na.rm = TRUE))
+
+###Finding average of female h2 data
+female_h2_means <- (colMeans(female_h2_data, na.rm = TRUE))
+
+#Fixing female data for Boxplot
+stacked_female_r2_gblub <- stack(female_r2_gblub)
+vec <- rep("Univariate", 150)
+stacked_female_r2_gblub$Analysis <- vec
+stacked_female_r2_mvgblub <- stack(female_r2_mvgblub)
+vecmv <- rep("Multiivariate", 150)
+stacked_female_r2_mvgblub$Analysis <- vecmv
+
+stacked_female_h2_gblub <- stack(female_h2_gblub)
+vec <- rep("Univariate", 150)
+stacked_female_h2_gblub$Analysis <- vec
+stacked_female_h2_mvgblub <- stack(female_h2_mvgblub)
+vecmv <- rep("Multiivariate", 150)
+stacked_female_h2_mvgblub$Analysis <- vecmv
+
+stacked_female_r2_data <- rbind(stacked_female_r2_gblub, stacked_female_r2_mvgblub)
+
+stacked_female_h2_data <- rbind(stacked_female_h2_gblub, stacked_female_h2_mvgblub)
+
+
+###Finding average of male r2 data
+male_r2_means <- (colMeans(male_r2_data, na.rm = TRUE))
+
+###Finding average of male h2 data
+male_h2_means <- (colMeans(male_h2_data, na.rm = TRUE))
+
+#Fixing male data for Boxplot
+stacked_male_r2_gblub <- stack(male_r2_gblub)
+vec <- rep("Univariate", 150)
+stacked_male_r2_gblub$Analysis <- vec
+stacked_male_r2_mvgblub <- stack(male_r2_mvgblub)
+vecmv <- rep("Multiivariate", 150)
+stacked_male_r2_mvgblub$Analysis <- vecmv
+
+stacked_male_h2_gblub <- stack(male_h2_gblub)
+vec <- rep("Univariate", 150)
+stacked_male_h2_gblub$Analysis <- vec
+stacked_male_h2_mvgblub <- stack(male_h2_mvgblub)
+vecmv <- rep("Multiivariate", 150)
+stacked_male_h2_mvgblub$Analysis <- vecmv
+
+stacked_male_r2_data <- rbind(stacked_male_r2_gblub, stacked_male_r2_mvgblub)
+
+stacked_male_h2_data <- rbind(stacked_male_h2_gblub, stacked_male_h2_mvgblub)
+
+
+
+##Female Boxplot
+boxplot_female <- ggplot(stacked_female_r2_data, aes(x=ind, y=values, fill = Analysis))+
+  geom_boxplot()+
+  labs(title = 'Female Heritability Plot', x = 'Temperature in Celcius', y = 'heritability')+
+  stat_summary(fun=mean, colour="darkred", geom="point",
+             shape=18, size=3, position = position_dodge2(width = 0.75,
+                                                        preserve = "single"))+
+  stat_summary(data = stacked_female_h2_data, fun = mean, colour="blue",  geom="point",
+               shape="-", size=10, position = position_dodge2(width = 0.75,
+                                                            preserve = "single"))
+boxplot_female
+
+##Male Boxplot
+boxplot_male <- ggplot(stacked_male_r2_data, aes(x=ind, y=values, fill = Analysis))+
+  geom_boxplot()+
+  labs(title = 'Male Heritability Plot', x = 'Temperature in Celcius', y = 'heritability')+
+  stat_summary(fun=mean, colour="darkred", geom="point",
+               shape=18, size=3, position = position_dodge2(width = 0.75,
+                                                            preserve = "single"))+
+  stat_summary(data = stacked_male_h2_data, fun = mean, colour="blue",  geom="point",
+               shape="-", size=10, position = position_dodge2(width = 0.75,
+                                                                       preserve = "single"))
+boxplot_male
+```
+## 18C, 25C, and 28C heritability Plots
+
+The boxplots below separated the data sets by the temperature environments: 18C, 25C, and 28C, and did univariate and multivariate analysis of the lifespans of the drosophila of both sexes withing the temperature environments. Within the plots the boxplots are grouped by temperature for univariate and multivariate analysis. The values of the boxplot consist of 50 observations of the R squared values. Within the boxplots the red diamond shows the mean of the R squared values and the blue line shows the mean of 50 observations of the heritability values. The  plot for the environemnt 18C is first followed by the 25C heritability Plot and then the 28C heritability Plot. 
+
+
+```{r}
+library(ggplot2)
+
+###Reading in results
+temp18c_res <- readRDS("/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_18c.rds")
+temp25c_res <- readRDS("/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_25c.rds")
+temp28c_res <- readRDS("/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_28c.rds")
+
+###18c r2 data loaded into one file, then seperated and made into data frames
+temp18c_r2 <- list(temp18c_r2_gblup=temp18c_res$r2_gblup_18c, temp18c_r2_mvgblup=temp18c_res$r2_mvgblup_18c)
+temp18c_r2_gblub <- temp18c_r2$temp18c_r2_gblup
+temp18c_r2_gblub <- as.data.frame(temp18c_r2_gblub)
+temp18c_r2_mvgblub <- temp18c_r2$temp18c_r2_mvgblup
+temp18c_r2_mvgblub <- as.data.frame(temp18c_r2_mvgblub)
+temp18c_r2_data <- merge(temp18c_r2_gblub, temp18c_r2_mvgblub, by = 0)
+rownames(temp18c_r2_data) <- temp18c_r2_data[,1]
+temp18c_r2_data <- temp18c_r2_data[,-1]
+colnames(temp18c_r2_data) <- c('Female_18c_uni','Female_18c_multi','Male_18c_uni','Male_18c_multi')
+
+
+###25c r2 data loaded into one file, then seperated and made into data frames
+temp25c_r2 <- list(temp25c_r2_gblup=temp25c_res$r2_gblup_25c, temp25c_r2_mvgblup=temp25c_res$r2_mvgblup_25c)
+temp25c_r2_gblub <- temp25c_r2$temp25c_r2_gblup
+temp25c_r2_gblub <- as.data.frame(temp25c_r2_gblub)
+temp25c_r2_mvgblub <- temp25c_r2$temp25c_r2_mvgblup
+temp25c_r2_mvgblub <- as.data.frame(temp25c_r2_mvgblub)
+temp25c_r2_data <- merge(temp25c_r2_gblub, temp25c_r2_mvgblub, by = 0)
+rownames(temp25c_r2_data) <- temp25c_r2_data[,1]
+temp25c_r2_data <- temp25c_r2_data[,-1]
+colnames(temp25c_r2_data) <- c('Female_25c_uni','Female_25c_multi','Male_25c_uni','Male_25c_multi')
+
+
+###28c r2 data loaded into one file, then seperated and made into data frames
+temp28c_r2 <- list(temp28c_r2_gblup=temp28c_res$r2_gblup_28c, temp28c_r2_mvgblup=temp28c_res$r2_mvgblup_28c)
+temp28c_r2_gblub <- temp28c_r2$temp28c_r2_gblup
+temp28c_r2_gblub <- as.data.frame(temp28c_r2_gblub)
+temp28c_r2_mvgblub <- temp28c_r2$temp28c_r2_mvgblup
+temp28c_r2_mvgblub <- as.data.frame(temp28c_r2_mvgblub)
+temp28c_r2_data <- merge(temp28c_r2_gblub, temp28c_r2_mvgblub, by = 0)
+rownames(temp28c_r2_data) <- temp28c_r2_data[,1]
+temp28c_r2_data <- temp28c_r2_data[,-1]
+colnames(temp28c_r2_data) <- c('Female_28c_uni','Female_28c_multi','Male_28c_uni','Male_28c_multi')
+
+
+###h2 data being input and organized
+
+###18c h2 data loaded into one file, then seperated and made into data frames
+temp18c_h2 <- list(temp18c_h2_gblup=temp18c_res$h2_gblup_18c, temp18c_h2_mvgblup=temp18c_res$h2_mvgblup_18c)
+temp18c_h2_gblub <- temp18c_h2$temp18c_h2_gblup
+temp18c_h2_gblub <- as.data.frame(temp18c_h2_gblub)
+temp18c_h2_mvgblub <- temp18c_h2$temp18c_h2_mvgblup
+temp18c_h2_mvgblub <- as.data.frame(temp18c_h2_mvgblub)
+temp18c_h2_data <- merge(temp18c_h2_gblub, temp18c_h2_mvgblub, by = 0)
+rownames(temp18c_h2_data) <- temp18c_h2_data[,1]
+temp18c_h2_data <- temp18c_h2_data[,-1]
+colnames(temp18c_h2_data) <- c('Female_18c_uni','Female_18c_multi','Male_18c_uni','Male_18c_multi')
+
+###25c h2 data loaded into one file, then seperated and made into data frames
+temp25c_h2 <- list(temp25c_h2_gblup=temp25c_res$h2_gblup_25c, temp25c_h2_mvgblup=temp25c_res$h2_mvgblup_25c)
+temp25c_h2_gblub <- temp25c_h2$temp25c_h2_gblup
+temp25c_h2_gblub <- as.data.frame(temp25c_h2_gblub)
+temp25c_h2_mvgblub <- temp25c_h2$temp25c_h2_mvgblup
+temp25c_h2_mvgblub <- as.data.frame(temp25c_h2_mvgblub)
+temp25c_h2_data <- merge(temp25c_h2_gblub, temp25c_h2_mvgblub, by = 0)
+rownames(temp25c_h2_data) <- temp25c_h2_data[,1]
+temp25c_h2_data <- temp25c_h2_data[,-1]
+colnames(temp25c_h2_data) <- c('Female_18c_uni','Female_18c_multi','Male_18c_uni','Male_18c_multi')
+
+###28c h2 data loaded into one file, then seperated and made into data frames
+temp28c_h2 <- list(temp28c_h2_gblup=temp28c_res$h2_gblup_28c, temp28c_h2_mvgblup=temp28c_res$h2_mvgblup_28c)
+temp28c_h2_gblub <- temp28c_h2$temp28c_h2_gblup
+temp28c_h2_gblub <- as.data.frame(temp28c_h2_gblub)
+temp28c_h2_mvgblub <- temp28c_h2$temp28c_h2_mvgblup
+temp28c_h2_mvgblub <- as.data.frame(temp28c_h2_mvgblub)
+temp28c_h2_data <- merge(temp28c_h2_gblub, temp28c_h2_mvgblub, by = 0)
+rownames(temp28c_h2_data) <- temp28c_h2_data[,1]
+temp28c_h2_data <- temp28c_h2_data[,-1]
+colnames(temp28c_h2_data) <- c('Female_18c_uni','Female_18c_multi','Male_18c_uni','Male_18c_multi')
+
+
+###Finding average of 18c r2 data
+temp18c_r2_means <- (colMeans(temp18c_r2_data, na.rm = TRUE))
+
+###Finding average of 18c h2 data
+temp18c_h2_means <- (colMeans(temp18c_h2_data, na.rm = TRUE))
+
+#Fixing 18C data for Boxplot
+stacked_temp18c_r2_gblub <- stack(temp18c_r2_gblub)
+vec <- rep("Univariate", 100)
+stacked_temp18c_r2_gblub$Analysis <- vec
+stacked_temp18c_r2_mvgblub <- stack(temp18c_r2_mvgblub)
+vecmv <- rep("Multiivariate", 100)
+stacked_temp18c_r2_mvgblub$Analysis <- vecmv
+
+stacked_temp18c_h2_gblub <- stack(temp18c_h2_gblub)
+vec <- rep("Univariate", 100)
+stacked_temp18c_h2_gblub$Analysis <- vec
+stacked_temp18c_h2_mvgblub <- stack(temp18c_h2_mvgblub)
+vecmv <- rep("Multiivariate", 100)
+stacked_temp18c_h2_mvgblub$Analysis <- vecmv
+
+stacked_temp18c_r2_data <- rbind(stacked_temp18c_r2_gblub, stacked_temp18c_r2_mvgblub)
+
+stacked_temp18c_h2_data <- rbind(stacked_temp18c_h2_gblub, stacked_temp18c_h2_mvgblub)
+
+
+###Finding average of 25c r2 data
+temp25c_r2_means <- (colMeans(temp25c_r2_data, na.rm = TRUE))
+
+###Finding average of 25c h2 data
+temp25c_h2_means <- (colMeans(temp25c_h2_data, na.rm = TRUE))
+
+#Fixing 25C data for Boxplot
+stacked_temp25c_r2_gblub <- stack(temp25c_r2_gblub)
+vec <- rep("Univariate", 100)
+stacked_temp25c_r2_gblub$Analysis <- vec
+stacked_temp25c_r2_mvgblub <- stack(temp25c_r2_mvgblub)
+vecmv <- rep("Multiivariate", 100)
+stacked_temp25c_r2_mvgblub$Analysis <- vecmv
+
+stacked_temp25c_h2_gblub <- stack(temp25c_h2_gblub)
+vec <- rep("Univariate", 100)
+stacked_temp25c_h2_gblub$Analysis <- vec
+stacked_temp25c_h2_mvgblub <- stack(temp25c_h2_mvgblub)
+vecmv <- rep("Multiivariate", 100)
+stacked_temp25c_h2_mvgblub$Analysis <- vecmv
+
+stacked_temp25c_r2_data <- rbind(stacked_temp25c_r2_gblub, stacked_temp25c_r2_mvgblub)
+
+stacked_temp25c_h2_data <- rbind(stacked_temp25c_h2_gblub, stacked_temp25c_h2_mvgblub)
+
+
+###Finding average of 28c r2 data
+temp28c_r2_means <- (colMeans(temp28c_r2_data, na.rm = TRUE))
+
+###Finding average of 28c h2 data
+temp28c_h2_means <- (colMeans(temp28c_h2_data, na.rm = TRUE))
+
+#Fixing 28C data for Boxplot
+stacked_temp28c_r2_gblub <- stack(temp28c_r2_gblub)
+vec <- rep("Univariate", 100)
+stacked_temp28c_r2_gblub$Analysis <- vec
+stacked_temp28c_r2_mvgblub <- stack(temp28c_r2_mvgblub)
+vecmv <- rep("Multiivariate", 100)
+stacked_temp28c_r2_mvgblub$Analysis <- vecmv
+
+stacked_temp28c_h2_gblub <- stack(temp28c_h2_gblub)
+vec <- rep("Univariate", 100)
+stacked_temp28c_h2_gblub$Analysis <- vec
+stacked_temp28c_h2_mvgblub <- stack(temp28c_h2_mvgblub)
+vecmv <- rep("Multiivariate", 100)
+stacked_temp28c_h2_mvgblub$Analysis <- vecmv
+
+stacked_temp28c_r2_data <- rbind(stacked_temp28c_r2_gblub, stacked_temp28c_r2_mvgblub)
+
+stacked_temp28c_h2_data <- rbind(stacked_temp28c_h2_gblub, stacked_temp28c_h2_mvgblub)
+
+
+
+##18C Boxplot
+boxplot_18c <- ggplot(stacked_temp18c_r2_data, aes(x=ind, y=values, fill = Analysis))+
+  geom_boxplot()+
+  labs(title = '18C Heritability Plot', x = 'Temperature in Celcius', y = 'heritability')+
+  stat_summary(fun=mean, colour="darkred", geom="point",
+               shape=18, size=3, position = position_dodge2(width = 0.75,
+                                                            preserve = "single"))+
+  stat_summary(data = stacked_temp18c_h2_data, fun = mean, colour="blue",  geom="point",
+               shape="-", size=10, position = position_dodge2(width = 0.75,
+                                                                       preserve = "single"))
+boxplot_18c
+
+##25C Boxplot
+boxplot_25c <- ggplot(stacked_temp25c_r2_data, aes(x=ind, y=values, fill = Analysis))+
+  geom_boxplot()+
+  labs(title = '25C Heritability Plot', x = 'Temperature in Celcius', y = 'heritability')+
+  stat_summary(fun=mean, colour="darkred", geom="point",
+               shape=18, size=3, position = position_dodge2(width = 0.75,
+                                                            preserve = "single"))+
+  stat_summary(data = stacked_temp25c_h2_data, fun = mean, colour="blue",  geom="point",
+               shape="-", size=10, position = position_dodge2(width = 0.75,
+                                                                       preserve = "single"))
+
+boxplot_25c
+
+##28C Boxplot
+boxplot_28c <- ggplot(stacked_temp28c_r2_data, aes(x=ind, y=values, fill = Analysis))+
+  geom_boxplot()+
+  labs(title = '28C Heritability Plot', x = 'Temperature in Celcius', y = 'heritability')+
+  stat_summary(fun=mean, colour="darkred", geom="point",
+               shape=18, size=3, position = position_dodge2(width = 0.75,
+                                                            preserve = "single"))+
+  stat_summary(data = stacked_temp28c_h2_data, fun = mean, colour="blue",  geom="point",
+               shape="-", size=10, position = position_dodge2(width = 0.75,
+                                                                       preserve = "single"))
+boxplot_28c
+
+```
+
+## Full Data Analysis
+
+The boxplots below took all the available data for the lifespan of drosophila and performed univariate and multivariate analysis. The values of the boxplot consist of 50 observations of the R squared values. Within the boxplots the red diamond shows the mean of the R squared values and the blue line shows the mean of 50 observations of the heritability values.
+```{r}
+library(ggplot2)
+
+###Reading in results
+all_res <- readRDS("/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_all.rds")
+
+###r2 data loaded into one file, then seperated and made into data frames
+all_r2 <- list(r2_gblup=all_res$r2_gblup, r2_mvgblup=all_res$r2_mvgblup)
+r2_gblub <- all_r2$r2_gblup
+r2_gblub <- as.data.frame(r2_gblub)
+r2_mvgblub <- all_r2$r2_mvgblup
+r2_mvgblub <- as.data.frame(r2_mvgblub)
+r2_data <- merge(r2_gblub, r2_mvgblub, by = 0)
+rownames(r2_data) <- r2_data[,1]
+r2_data <- r2_data[,-1]
+r2_data <- r2_data[, c(1,7,2,8,3,9,4,10,5,11,6,12)]
+colnames(r2_data) <- c('Female_18c_uni','Female_18c_multi','Female_25c_uni','Female_25c_multi','Female_28c_uni','Female_28c_multi','Male_18c_uni','Male_18c_multi','Male_25c_uni','Male_25c_multi','Male_28c_uni','Male_28c_multi')
+
+
+###h2 data loaded into one file, then seperated and made into data frames
+all_h2 <- list(h2_gblup=all_res$h2_gblup, h2_mvgblup=all_res$h2_mvgblup)
+h2_gblub <- all_h2$h2_gblup
+h2_gblub <- as.data.frame(h2_gblub)
+h2_mvgblub <- all_h2$h2_mvgblup
+h2_mvgblub <- as.data.frame(h2_mvgblub)
+h2_data <- merge(h2_gblub, h2_mvgblub, by = 0)
+rownames(h2_data) <- h2_data[,1]
+h2_data <- h2_data[,-1]
+h2_data <- h2_data[, c(1,7,2,8,3,9,4,10,5,11,6,12)]
+colnames(h2_data) <- c('Female_18c_uni','Female_18c_multi','Female_25c_uni','Female_25c_multi','Female_28c_uni','Female_28c_multi','Male_18c_uni','Male_18c_multi','Male_25c_uni','Male_25c_multi','Male_28c_uni','Male_28c_multi')
+
+
+###Finding average of r2 data
+r2_means <- (colMeans(r2_data, na.rm = TRUE))
+
+###Finding average of h2 data
+h2_means <- (colMeans(h2_data, na.rm = TRUE))
+
+#Fixing data for Boxplot
+stacked_r2_gblub <- stack(r2_gblub)
+vec <- rep("Univariate", 100)
+stacked_r2_gblub$Analysis <- vec
+stacked_r2_mvgblub <- stack(r2_mvgblub)
+vecmv <- rep("Multiivariate", 100)
+stacked_r2_mvgblub$Analysis <- vecmv
+
+stacked_h2_gblub <- stack(h2_gblub)
+vec <- rep("Univariate", 100)
+stacked_h2_gblub$Analysis <- vec
+stacked_h2_mvgblub <- stack(h2_mvgblub)
+vecmv <- rep("Multiivariate", 100)
+stacked_h2_mvgblub$Analysis <- vecmv
+
+stacked_r2_data <- rbind(stacked_r2_gblub, stacked_r2_mvgblub)
+
+stacked_h2_data <- rbind(stacked_h2_gblub, stacked_h2_mvgblub)
+
+
+##Boxplot
+boxplot <- ggplot(stacked_r2_data, aes(x=ind, y=values, fill = Analysis))+
+  geom_boxplot()+
+  labs(title = 'Heritability Plot', x = 'Temperature and Sex Groups', y = 'heritability')+
+  stat_summary(fun=mean, colour="darkred", geom="point",
+               shape=18, size=3, position = position_dodge2(width = 0.75,
+                                                            preserve = "single"))+
+  stat_summary(data = stacked_h2_data, fun = mean, colour="blue",  geom="point",
+               shape="-", size=10, position = position_dodge2(width = 0.75,
+                                                              preserve = "single"))
+boxplot
+```
+

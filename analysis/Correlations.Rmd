@@ -1,0 +1,219 @@
+---
+title: "Correlations"
+date: “2022-03-17"
+output:
+  workflowr::wflow_html:
+    toc: FALSE
+    self_contained: no
+    df_print: tibble
+    theme: spacelab
+    code_folding: show
+editor_options:
+  chunk_output_type: console
+
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Correlation Plots
+The results of the univariate and multivariate analysis methods did not show a significant improvement in the multivariate method. The next step of this project is to determine if there is a correlation between the phenotypes. If there is no correlation, then it makes sense that the multivariate analysis did not yield better results than univariate analysis. If there is correlation then the data needs to be reanalyzed. 
+Below are the plots for the correlation for every phenotypic comparison. On the x-axis the labels give the two categories of phenotypes being analyzed. For example female_18_female_25 is the correlation between the lifespan for a female in the 18oC environment and the lifespan for a female in the 25oC environment. The y-axis is the correlation value on a 0-1 scale. 
+
+## Female Correlation Plot
+```{r}
+library(ggplot2)
+
+###Reading in results
+rg_res_female <- readRDS("/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_rg_female.rds")
+
+###Objects for the rg data
+female_18_female_25 = as.data.frame(rg_res_female$female_18_female_25)
+colnames(female_18_female_25) = "female_18_female_25"
+female_18_female_28 = as.data.frame(rg_res_female$female_18_female_28)
+colnames(female_18_female_28) = "female_18_female_28"
+female_25_female_28 = as.data.frame(rg_res_female$female_25_female_28)
+colnames(female_25_female_28) = "female_25_female_28"
+
+###COMBINE AND STACK
+female_rg <- cbind(female_18_female_25,
+                female_18_female_28,
+                female_25_female_28)
+
+female_rg <- stack(female_rg)
+
+###Make Female Boxplot
+boxplot_female <- ggplot(female_rg, aes(x=ind, y=values))+
+  geom_boxplot()+
+  labs(title = 'Female Correlation Plot', x = 'Temperature Groups', y = 'Correlation Values')+
+  scale_y_continuous(limits=c(0,1))
+boxplot_female
+```
+
+
+## Male Correlation Plot
+```{r}
+library(ggplot2)
+
+###Reading in results
+rg_res_male <- readRDS("/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_rg_male.rds")
+
+###Objects for the rg data
+male_18_male_25 = as.data.frame(rg_res_male$male_18_male_25)
+colnames(male_18_male_25) = "male_18_male_25"
+male_18_male_28 = as.data.frame(rg_res_male$male_18_male_28)
+colnames(male_18_male_28) = "male_18_male_28"
+male_25_male_28 = as.data.frame(rg_res_male$male_25_male_28)
+colnames(male_25_male_28) = "male_25_male_28"
+
+male_rg <- cbind(male_18_male_25,
+                male_18_male_28,
+                male_25_male_28)
+
+male_rg <- stack(male_rg)
+
+###Make All Boxplot
+boxplot_male <- ggplot(male_rg, aes(x=ind, y=values))+
+  geom_boxplot()+
+  labs(title = 'Male Correlation Plot', x = 'Temperature Groups', y = 'Correlation Values')+
+  scale_y_continuous(limits=c(0,1))
+boxplot_male
+```
+
+## 18C Correlation Plot
+```{r}
+library(ggplot2)
+
+###Reading in results
+rg_res_18c <- readRDS("/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_rg_18c.rds")
+
+###Objects for the rg data
+female_18_male_18 = as.data.frame(rg_res_18c$female_18_male_18)
+colnames(female_18_male_18) = "female_18_male_18"
+
+temp18c_rg <- cbind(female_18_male_18)
+
+temp18c_rg <- stack(temp18c_rg)
+
+###Make All Boxplot
+boxplot_18c <- ggplot(temp18c_rg, aes(x=ind, y=values))+
+  geom_boxplot()+
+  labs(title = '18C Correlation Plot', x = 'Sex Groups', y = 'Correlation Values')+
+  scale_y_continuous(limits=c(0,1))
+boxplot_18c
+```
+
+## 25C Correlation Plot
+```{r}
+library(ggplot2)
+
+###Reading in results
+rg_res_25c <- readRDS("/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_rg_25c.rds")
+
+###Objects for the rg data
+female_25_male_25 = as.data.frame(rg_res_25c$female_25_male_25)
+colnames(female_25_male_25) = "female_25_male_25"
+
+temp25c_rg <- cbind(female_25_male_25)
+
+temp25c_rg <- stack(temp25c_rg)
+
+###Make All Boxplot
+boxplot_25c <- ggplot(temp25c_rg, aes(x=ind, y=values))+
+  geom_boxplot()+
+  labs(title = '25C Correlation Plot', x = 'Sex Groups', y = 'Correlation Values')+
+  scale_y_continuous(limits=c(0,1))
+boxplot_25c
+```
+
+## 28C Plot
+```{r}
+library(ggplot2)
+
+###Reading in results
+rg_res_28c <- readRDS("/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_rg_28c.rds")
+
+###Objects for the rg data
+female_28_male_28 = as.data.frame(rg_res_28c$female_28_male_28)
+colnames(female_28_male_28) = "female_28_male_28"
+
+temp28c_rg <- cbind(female_28_male_28)
+
+temp28c_rg <- stack(temp28c_rg)
+
+###Make All Boxplot
+boxplot_28c <- ggplot(temp28c_rg, aes(x=ind, y=values))+
+  geom_boxplot()+
+  labs(title = '28C Correlation Plot', x = 'Sex Groups', y = 'Correlation Values')+
+  scale_y_continuous(limits=c(0,1))
+boxplot_28c
+```
+
+## All Correlation Plots
+```{r}
+library(ggplot2)
+
+###Reading in results
+rg_res <- readRDS("/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_rg.rds")
+
+###Objects for the rg data
+female_18_female_25 = as.data.frame(rg_res$female_18_female_25)
+  colnames(female_18_female_25) = "female_18_female_25"
+female_18_female_28 = as.data.frame(rg_res$female_18_female_28)
+  colnames(female_18_female_28) = "female_18_female_28"
+female_18_male_18 = as.data.frame(rg_res$female_18_male_18)
+  colnames(female_18_male_18) = "female_18_male_18"
+female_18_male_25 = as.data.frame(rg_res$female_18_male_25)
+  colnames(female_18_male_25) = "female_18_male_25"
+female_18_male_28 = as.data.frame(rg_res$female_18_male_28)
+  colnames(female_18_male_28) = "female_18_male_28"
+female_25_female_28 = as.data.frame(rg_res$female_25_female_28)
+  colnames(female_25_female_28) = "female_25_female_28"
+female_25_male_18 = as.data.frame(rg_res$female_25_male_18)
+  colnames(female_25_male_18) = "female_25_male_18"
+female_25_male_25 = as.data.frame(rg_res$female_25_male_25)
+  colnames(female_25_male_25) = "female_25_male_25"
+female_25_male_28 = as.data.frame(rg_res$female_25_male_28)
+  colnames(female_25_male_28) = "female_25_male_28"
+female_28_male_18 = as.data.frame(rg_res$female_28_male_18)
+  colnames(female_28_male_18) = "female_28_male_18"
+female_28_male_25 = as.data.frame(rg_res$female_28_male_25)
+  colnames(female_28_male_25) = "female_28_male_25"
+female_28_male_28 = as.data.frame(rg_res$female_28_male_28)
+  colnames(female_28_male_28) = "female_28_male_28"
+male_18_male_25 = as.data.frame(rg_res$male_18_male_25)
+  colnames(male_18_male_25) = "male_18_male_25"
+male_18_male_28 = as.data.frame(rg_res$male_18_male_28)
+  colnames(male_18_male_28) = "male_18_male_28"
+male_25_male_28 = as.data.frame(rg_res$male_25_male_28)
+  colnames(male_25_male_28) = "male_25_male_28"
+
+all_rg <- cbind(female_18_female_25,
+                female_18_female_28,
+                female_18_male_18,
+                female_18_male_25,
+                female_18_male_28,
+                female_25_female_28,
+                female_25_male_18,
+                female_25_male_25,
+                female_25_male_28,
+                female_28_male_18,
+                female_28_male_25,
+                female_28_male_28,
+                male_18_male_25,
+                male_18_male_28,
+                male_25_male_28)
+
+stack_all_rg <- stack(all_rg)
+
+###Make All Boxplot
+boxplot_all <- ggplot(stack_all_rg, aes(x=ind, y=values))+
+                geom_boxplot()+
+                labs(title = 'Complete Correlation Plot', x = 'Temperature and Sex Groups', y = 'Correlation Values')+
+                theme(axis.text.x = element_text(angle = 30))+
+                scale_y_continuous(limits=c(0,1))
+boxplot_all
+```
+
