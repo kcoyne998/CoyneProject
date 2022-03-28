@@ -1,0 +1,1730 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Boxplot Results</title>
+
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/spacelab.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Coyne Project</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/CoyneProject">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Boxplot Results</h1>
+<h4 class="date">“2022-02-28”</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-03-24
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>CoyneProject/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version 1.7.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220228code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20220228)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20220228code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20220228)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomCoyneProjectCoyneProjecttree766f1a3c645ebeea9c3f9d5dd1b6be975a083a2ftargetblank766f1a3a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/CoyneProject/CoyneProject/tree/766f1a3c645ebeea9c3f9d5dd1b6be975a083a2f" target="_blank">766f1a3</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomCoyneProjectCoyneProjecttree766f1a3c645ebeea9c3f9d5dd1b6be975a083a2ftargetblank766f1a3a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/CoyneProject/CoyneProject/tree/766f1a3c645ebeea9c3f9d5dd1b6be975a083a2f" target="_blank">766f1a3</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .RData
+    Ignored:    .Rproj.user/
+
+Unstaged changes:
+    Modified:   analysis/Background.Rmd
+    Modified:   analysis/style.css
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/Results.Rmd</code>) and HTML (<code>docs/Results.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/766f1a3c645ebeea9c3f9d5dd1b6be975a083a2f/analysis/Results.Rmd" target="_blank">766f1a3</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-24
+</td>
+<td>
+details
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/CoyneProject/CoyneProject/78dbdd3dcbbf701045f6e66b38cf7804653a790a/docs/Results.html" target="_blank">78dbdd3</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-24
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/ab80e5da54eb33dc697c0584823f82518850d4dc/analysis/Results.Rmd" target="_blank">ab80e5d</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-24
+</td>
+<td>
+details
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/CoyneProject/CoyneProject/2de29eadf2546fe6d2f66f14bffa42fa70164fab/docs/Results.html" target="_blank">2de29ea</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-24
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/7a11d51c81805c8e7ae0e4a11099137e1b9d0074/analysis/Results.Rmd" target="_blank">7a11d51</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-24
+</td>
+<td>
+details
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/CoyneProject/CoyneProject/6b43c9d3d0beda8e6cedab60d679bef0ab21dee6/docs/Results.html" target="_blank">6b43c9d</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/0e8c6833194f7200ce0a85fdf468bec38256120d/analysis/Results.Rmd" target="_blank">0e8c683</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-10
+</td>
+<td>
+Update before meeting 3/10
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/CoyneProject/CoyneProject/24ab69eb161485a27baefdb28213157ed5144fea/docs/Results.html" target="_blank">24ab69e</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/7dd2804881b6f40ad5cdd9619110b01f1dc8466b/analysis/Results.Rmd" target="_blank">7dd2804</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-10
+</td>
+<td>
+Update before meeting 3/10
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/CoyneProject/CoyneProject/21f3b95f05b86ef37a61d1fcbd520b9351be33c7/docs/Results.html" target="_blank">21f3b95</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/eb35db6e4d421d1203ab1659a7cfe4885029ac95/analysis/Results.Rmd" target="_blank">eb35db6</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-10
+</td>
+<td>
+Customize website style.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/CoyneProject/CoyneProject/7c0e2b4e185ecac966add5bce3de7bf70f9fa28d/docs/Results.html" target="_blank">7c0e2b4</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/d063bf0b0ea40d17b6c5b6d97f20d5efe9daa570/analysis/Results.Rmd" target="_blank">d063bf0</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-10
+</td>
+<td>
+Customize website style.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/CoyneProject/CoyneProject/6c5eb008714996c37e92245ccf9ba62bae5c6279/docs/Results.html" target="_blank">6c5eb00</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-07
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/9cff6141a3260bfc52916c6e9bfa377341c7df23/analysis/Results.Rmd" target="_blank">9cff614</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-07
+</td>
+<td>
+Publishing of Results and Home
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/CoyneProject/CoyneProject/31c4f38a2a5f5383c8cfa6b58120acc8ef5f1df7/docs/Results.html" target="_blank">31c4f38</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-03
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/6d51bfd7069cb225c106ce827164a06d31d8ccbc/analysis/Results.Rmd" target="_blank">6d51bfd</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-03
+</td>
+<td>
+Publishing of Results
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/CoyneProject/CoyneProject/9d4613b95da10c069849141e4879be8dd704f0a3/docs/Results.html" target="_blank">9d4613b</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-01
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/c40e3b5f09a25d16193e52dc71295a3a7ae865a6/analysis/Results.Rmd" target="_blank">c40e3b5</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-01
+</td>
+<td>
+Results in Boxplots
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/CoyneProject/CoyneProject/96b9a003487439811f34412c905d5c4aff805493/docs/Results.html" target="_blank">96b9a00</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-01
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/CoyneProject/CoyneProject/602717720efd4fe8b8a1fec63591555b8c73871a/docs/Results.html" target="_blank">6027177</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-01
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/d1da32d6e5708a77c7749155f55d052d7367296e/analysis/Results.Rmd" target="_blank">d1da32d</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-01
+</td>
+<td>
+Results in Boxplots
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="about" class="section level2">
+<h2>About</h2>
+<p>The boxplots below separated the data sets by sex and did univariate and multivariate analysis of the lifespans of the drosophila in three separate temperature conditions: 18C, 25C, and 28C. Within the plots the boxplots are grouped by temperature for univariate and multivariate analysis. The values of the boxplot consist of 50 observations of the R squared values. Within the boxplots the red diamond shows the mean of the R squared values and the blue line shows the mean of 50 observations of the heritability values. The Female heritability Plot is first followed by the Male heritability Plot.</p>
+</div>
+<div id="female-and-male-heritability-plots" class="section level2">
+<h2>Female and Male heritability Plots</h2>
+<pre class="r"><code>library(ggplot2)
+
+###Reading in results
+female_res &lt;- readRDS(&quot;/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_h2_female.rds&quot;)
+male_res &lt;- readRDS(&quot;/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_h2_male.rds&quot;)
+
+###Female r2 data loaded into one file, then seperated and made into data frames
+female_r2 &lt;- list(female_r2_gblup=female_res$r2_gblup_FEMALE, female_r2_mvgblup=female_res$r2_mvgblup_FEMALE)
+female_r2_gblub &lt;- female_r2$female_r2_gblup
+female_r2_gblub &lt;- as.data.frame(female_r2_gblub)
+female_r2_mvgblub &lt;- female_r2$female_r2_mvgblup
+female_r2_mvgblub &lt;- as.data.frame(female_r2_mvgblub)
+female_r2_data &lt;- merge(female_r2_gblub, female_r2_mvgblub, by = 0)
+rownames(female_r2_data) &lt;- female_r2_data[,1]
+female_r2_data &lt;- female_r2_data[,-1]
+colnames(female_r2_data) &lt;- c(&#39;Female_18c_uni&#39;,&#39;Female_25c_uni&#39;,&#39;Female_28c_uni&#39;,&#39;Female_18c_multi&#39;,&#39;Female_25c_multi&#39;,&#39;Female_28c_multi&#39;)
+female_r2_data &lt;- female_r2_data[, c(1,4,2,5,3,6)]
+
+
+###Male r2 data loaded into one file, then seperated and made into data frames
+male_r2 &lt;- list(male_r2_gblup=male_res$r2_gblup_MALE, male_r2_mvgblup=male_res$r2_mvgblup_MALE)
+male_r2_gblub &lt;- male_r2$male_r2_gblup
+male_r2_gblub &lt;- as.data.frame(male_r2_gblub)
+male_r2_mvgblub &lt;- male_r2$male_r2_mvgblup
+male_r2_mvgblub &lt;- as.data.frame(male_r2_mvgblub)
+male_r2_data &lt;- merge(male_r2_gblub, male_r2_mvgblub, by = 0)
+rownames(male_r2_data) &lt;- male_r2_data[,1]
+male_r2_data &lt;- male_r2_data[,-1]
+colnames(male_r2_data) &lt;- c(&#39;Male_18c_uni&#39;,&#39;Male_25c_uni&#39;,&#39;Male_28c_uni&#39;,&#39;Male_18c_multi&#39;,&#39;Male_25c_multi&#39;,&#39;Male_28c_multi&#39;)
+male_r2_data &lt;- male_r2_data[, c(1,4,2,5,3,6)]
+
+
+###Female h2 data loaded into one file, then seperated and made into data frames
+female_h2 &lt;- list(female_h2_gblup=female_res$h2_gblup_FEMALE, female_h2_mvgblup=female_res$h2_mvgblup_FEMALE)
+female_h2_gblub &lt;- female_h2$female_h2_gblup
+female_h2_gblub &lt;- as.data.frame(female_h2_gblub)
+female_h2_mvgblub &lt;- female_h2$female_h2_mvgblup
+female_h2_mvgblub &lt;- as.data.frame(female_h2_mvgblub)
+female_h2_data &lt;- merge(female_h2_gblub, female_h2_mvgblub, by = 0)
+rownames(female_h2_data) &lt;- female_h2_data[,1]
+female_h2_data &lt;- female_h2_data[,-1]
+colnames(female_h2_data) &lt;- c(&#39;Female_18c_uni&#39;,&#39;Female_25c_uni&#39;,&#39;Female_28c_uni&#39;,&#39;Female_18c_multi&#39;,&#39;Female_25c_multi&#39;,&#39;Female_28c_multi&#39;)
+female_h2_data &lt;- female_h2_data[, c(1,4,2,5,3,6)]
+
+
+
+###Male h2 data loaded into one file, then seperated and made into data frames
+male_h2 &lt;- list(male_h2_gblup=male_res$h2_gblup_MALE, male_h2_mvgblup=male_res$h2_mvgblup_MALE)
+male_h2_gblub &lt;- male_h2$male_h2_gblup
+male_h2_gblub &lt;- as.data.frame(male_h2_gblub)
+male_h2_mvgblub &lt;- male_h2$male_h2_mvgblup
+male_h2_mvgblub &lt;- as.data.frame(male_h2_mvgblub)
+male_h2_data &lt;- merge(male_h2_gblub, male_h2_mvgblub, by = 0)
+rownames(male_h2_data) &lt;- male_h2_data[,1]
+male_h2_data &lt;- male_h2_data[,-1]
+colnames(male_h2_data) &lt;- c(&#39;Male_18c_uni&#39;,&#39;Male_25c_uni&#39;,&#39;Male_28c_uni&#39;,&#39;Male_18c_multi&#39;,&#39;Male_25c_multi&#39;,&#39;Male_28c_multi&#39;)
+male_h2_data &lt;- male_h2_data[, c(1,4,2,5,3,6)]
+
+
+###Finding average of female r2 data
+female_r2_means &lt;- (colMeans(female_r2_data, na.rm = TRUE))
+
+###Finding average of female h2 data
+female_h2_means &lt;- (colMeans(female_h2_data, na.rm = TRUE))
+
+#Fixing female data for Boxplot
+stacked_female_r2_gblub &lt;- stack(female_r2_gblub)
+vec &lt;- rep(&quot;Univariate&quot;, 150)
+stacked_female_r2_gblub$Analysis &lt;- vec
+stacked_female_r2_mvgblub &lt;- stack(female_r2_mvgblub)
+vecmv &lt;- rep(&quot;Multiivariate&quot;, 150)
+stacked_female_r2_mvgblub$Analysis &lt;- vecmv
+
+stacked_female_h2_gblub &lt;- stack(female_h2_gblub)
+vec &lt;- rep(&quot;Univariate&quot;, 150)
+stacked_female_h2_gblub$Analysis &lt;- vec
+stacked_female_h2_mvgblub &lt;- stack(female_h2_mvgblub)
+vecmv &lt;- rep(&quot;Multiivariate&quot;, 150)
+stacked_female_h2_mvgblub$Analysis &lt;- vecmv
+
+stacked_female_r2_data &lt;- rbind(stacked_female_r2_gblub, stacked_female_r2_mvgblub)
+
+stacked_female_h2_data &lt;- rbind(stacked_female_h2_gblub, stacked_female_h2_mvgblub)
+
+
+###Finding average of male r2 data
+male_r2_means &lt;- (colMeans(male_r2_data, na.rm = TRUE))
+
+###Finding average of male h2 data
+male_h2_means &lt;- (colMeans(male_h2_data, na.rm = TRUE))
+
+#Fixing male data for Boxplot
+stacked_male_r2_gblub &lt;- stack(male_r2_gblub)
+vec &lt;- rep(&quot;Univariate&quot;, 150)
+stacked_male_r2_gblub$Analysis &lt;- vec
+stacked_male_r2_mvgblub &lt;- stack(male_r2_mvgblub)
+vecmv &lt;- rep(&quot;Multiivariate&quot;, 150)
+stacked_male_r2_mvgblub$Analysis &lt;- vecmv
+
+stacked_male_h2_gblub &lt;- stack(male_h2_gblub)
+vec &lt;- rep(&quot;Univariate&quot;, 150)
+stacked_male_h2_gblub$Analysis &lt;- vec
+stacked_male_h2_mvgblub &lt;- stack(male_h2_mvgblub)
+vecmv &lt;- rep(&quot;Multiivariate&quot;, 150)
+stacked_male_h2_mvgblub$Analysis &lt;- vecmv
+
+stacked_male_r2_data &lt;- rbind(stacked_male_r2_gblub, stacked_male_r2_mvgblub)
+
+stacked_male_h2_data &lt;- rbind(stacked_male_h2_gblub, stacked_male_h2_mvgblub)
+
+
+
+##Female Boxplot
+boxplot_female &lt;- ggplot(stacked_female_r2_data, aes(x=ind, y=values, fill = Analysis))+
+  geom_boxplot()+
+  labs(title = &#39;Female Heritability Plot&#39;, x = &#39;Temperature in Celcius&#39;, y = &#39;heritability&#39;)+
+  stat_summary(fun=mean, colour=&quot;darkred&quot;, geom=&quot;point&quot;,
+             shape=18, size=3, position = position_dodge2(width = 0.75,
+                                                        preserve = &quot;single&quot;))+
+  stat_summary(data = stacked_female_h2_data, fun = mean, colour=&quot;blue&quot;,  geom=&quot;point&quot;,
+               shape=&quot;-&quot;, size=10, position = position_dodge2(width = 0.75,
+                                                            preserve = &quot;single&quot;))
+boxplot_female</code></pre>
+<p><img src="figure/Results.Rmd/unnamed-chunk-1-1.svg" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-1">
+Past versions of unnamed-chunk-1-1.svg
+</button>
+</p>
+<div id="fig-unnamed-chunk-1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/21f3b95f05b86ef37a61d1fcbd520b9351be33c7/docs/figure/Results.Rmd/unnamed-chunk-1-1.svg" target="_blank">21f3b95</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-10
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/31c4f38a2a5f5383c8cfa6b58120acc8ef5f1df7/docs/figure/Results.Rmd/unnamed-chunk-1-1.svg" target="_blank">31c4f38</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-03
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/602717720efd4fe8b8a1fec63591555b8c73871a/docs/figure/Results.Rmd/unnamed-chunk-1-1.svg" target="_blank">6027177</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code>##Male Boxplot
+boxplot_male &lt;- ggplot(stacked_male_r2_data, aes(x=ind, y=values, fill = Analysis))+
+  geom_boxplot()+
+  labs(title = &#39;Male Heritability Plot&#39;, x = &#39;Temperature in Celcius&#39;, y = &#39;heritability&#39;)+
+  stat_summary(fun=mean, colour=&quot;darkred&quot;, geom=&quot;point&quot;,
+               shape=18, size=3, position = position_dodge2(width = 0.75,
+                                                            preserve = &quot;single&quot;))+
+  stat_summary(data = stacked_male_h2_data, fun = mean, colour=&quot;blue&quot;,  geom=&quot;point&quot;,
+               shape=&quot;-&quot;, size=10, position = position_dodge2(width = 0.75,
+                                                                       preserve = &quot;single&quot;))
+boxplot_male</code></pre>
+<p><img src="figure/Results.Rmd/unnamed-chunk-1-2.svg" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-2">
+Past versions of unnamed-chunk-1-2.svg
+</button>
+</p>
+<div id="fig-unnamed-chunk-1-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/21f3b95f05b86ef37a61d1fcbd520b9351be33c7/docs/figure/Results.Rmd/unnamed-chunk-1-2.svg" target="_blank">21f3b95</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-10
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/31c4f38a2a5f5383c8cfa6b58120acc8ef5f1df7/docs/figure/Results.Rmd/unnamed-chunk-1-2.svg" target="_blank">31c4f38</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-03
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/602717720efd4fe8b8a1fec63591555b8c73871a/docs/figure/Results.Rmd/unnamed-chunk-1-2.svg" target="_blank">6027177</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="c-25c-and-28c-heritability-plots" class="section level2">
+<h2>18C, 25C, and 28C heritability Plots</h2>
+<p>The boxplots below separated the data sets by the temperature environments: 18C, 25C, and 28C, and did univariate and multivariate analysis of the lifespans of the drosophila of both sexes withing the temperature environments. Within the plots the boxplots are grouped by temperature for univariate and multivariate analysis. The values of the boxplot consist of 50 observations of the R squared values. Within the boxplots the red diamond shows the mean of the R squared values and the blue line shows the mean of 50 observations of the heritability values. The plot for the environemnt 18C is first followed by the 25C heritability Plot and then the 28C heritability Plot.</p>
+<pre class="r"><code>library(ggplot2)
+
+###Reading in results
+temp18c_res &lt;- readRDS(&quot;/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_18c.rds&quot;)
+temp25c_res &lt;- readRDS(&quot;/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_25c.rds&quot;)
+temp28c_res &lt;- readRDS(&quot;/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_28c.rds&quot;)
+
+###18c r2 data loaded into one file, then seperated and made into data frames
+temp18c_r2 &lt;- list(temp18c_r2_gblup=temp18c_res$r2_gblup_18c, temp18c_r2_mvgblup=temp18c_res$r2_mvgblup_18c)
+temp18c_r2_gblub &lt;- temp18c_r2$temp18c_r2_gblup
+temp18c_r2_gblub &lt;- as.data.frame(temp18c_r2_gblub)
+temp18c_r2_mvgblub &lt;- temp18c_r2$temp18c_r2_mvgblup
+temp18c_r2_mvgblub &lt;- as.data.frame(temp18c_r2_mvgblub)
+temp18c_r2_data &lt;- merge(temp18c_r2_gblub, temp18c_r2_mvgblub, by = 0)
+rownames(temp18c_r2_data) &lt;- temp18c_r2_data[,1]
+temp18c_r2_data &lt;- temp18c_r2_data[,-1]
+colnames(temp18c_r2_data) &lt;- c(&#39;Female_18c_uni&#39;,&#39;Female_18c_multi&#39;,&#39;Male_18c_uni&#39;,&#39;Male_18c_multi&#39;)
+
+
+###25c r2 data loaded into one file, then seperated and made into data frames
+temp25c_r2 &lt;- list(temp25c_r2_gblup=temp25c_res$r2_gblup_25c, temp25c_r2_mvgblup=temp25c_res$r2_mvgblup_25c)
+temp25c_r2_gblub &lt;- temp25c_r2$temp25c_r2_gblup
+temp25c_r2_gblub &lt;- as.data.frame(temp25c_r2_gblub)
+temp25c_r2_mvgblub &lt;- temp25c_r2$temp25c_r2_mvgblup
+temp25c_r2_mvgblub &lt;- as.data.frame(temp25c_r2_mvgblub)
+temp25c_r2_data &lt;- merge(temp25c_r2_gblub, temp25c_r2_mvgblub, by = 0)
+rownames(temp25c_r2_data) &lt;- temp25c_r2_data[,1]
+temp25c_r2_data &lt;- temp25c_r2_data[,-1]
+colnames(temp25c_r2_data) &lt;- c(&#39;Female_25c_uni&#39;,&#39;Female_25c_multi&#39;,&#39;Male_25c_uni&#39;,&#39;Male_25c_multi&#39;)
+
+
+###28c r2 data loaded into one file, then seperated and made into data frames
+temp28c_r2 &lt;- list(temp28c_r2_gblup=temp28c_res$r2_gblup_28c, temp28c_r2_mvgblup=temp28c_res$r2_mvgblup_28c)
+temp28c_r2_gblub &lt;- temp28c_r2$temp28c_r2_gblup
+temp28c_r2_gblub &lt;- as.data.frame(temp28c_r2_gblub)
+temp28c_r2_mvgblub &lt;- temp28c_r2$temp28c_r2_mvgblup
+temp28c_r2_mvgblub &lt;- as.data.frame(temp28c_r2_mvgblub)
+temp28c_r2_data &lt;- merge(temp28c_r2_gblub, temp28c_r2_mvgblub, by = 0)
+rownames(temp28c_r2_data) &lt;- temp28c_r2_data[,1]
+temp28c_r2_data &lt;- temp28c_r2_data[,-1]
+colnames(temp28c_r2_data) &lt;- c(&#39;Female_28c_uni&#39;,&#39;Female_28c_multi&#39;,&#39;Male_28c_uni&#39;,&#39;Male_28c_multi&#39;)
+
+
+###h2 data being input and organized
+
+###18c h2 data loaded into one file, then seperated and made into data frames
+temp18c_h2 &lt;- list(temp18c_h2_gblup=temp18c_res$h2_gblup_18c, temp18c_h2_mvgblup=temp18c_res$h2_mvgblup_18c)
+temp18c_h2_gblub &lt;- temp18c_h2$temp18c_h2_gblup
+temp18c_h2_gblub &lt;- as.data.frame(temp18c_h2_gblub)
+temp18c_h2_mvgblub &lt;- temp18c_h2$temp18c_h2_mvgblup
+temp18c_h2_mvgblub &lt;- as.data.frame(temp18c_h2_mvgblub)
+temp18c_h2_data &lt;- merge(temp18c_h2_gblub, temp18c_h2_mvgblub, by = 0)
+rownames(temp18c_h2_data) &lt;- temp18c_h2_data[,1]
+temp18c_h2_data &lt;- temp18c_h2_data[,-1]
+colnames(temp18c_h2_data) &lt;- c(&#39;Female_18c_uni&#39;,&#39;Female_18c_multi&#39;,&#39;Male_18c_uni&#39;,&#39;Male_18c_multi&#39;)
+
+###25c h2 data loaded into one file, then seperated and made into data frames
+temp25c_h2 &lt;- list(temp25c_h2_gblup=temp25c_res$h2_gblup_25c, temp25c_h2_mvgblup=temp25c_res$h2_mvgblup_25c)
+temp25c_h2_gblub &lt;- temp25c_h2$temp25c_h2_gblup
+temp25c_h2_gblub &lt;- as.data.frame(temp25c_h2_gblub)
+temp25c_h2_mvgblub &lt;- temp25c_h2$temp25c_h2_mvgblup
+temp25c_h2_mvgblub &lt;- as.data.frame(temp25c_h2_mvgblub)
+temp25c_h2_data &lt;- merge(temp25c_h2_gblub, temp25c_h2_mvgblub, by = 0)
+rownames(temp25c_h2_data) &lt;- temp25c_h2_data[,1]
+temp25c_h2_data &lt;- temp25c_h2_data[,-1]
+colnames(temp25c_h2_data) &lt;- c(&#39;Female_18c_uni&#39;,&#39;Female_18c_multi&#39;,&#39;Male_18c_uni&#39;,&#39;Male_18c_multi&#39;)
+
+###28c h2 data loaded into one file, then seperated and made into data frames
+temp28c_h2 &lt;- list(temp28c_h2_gblup=temp28c_res$h2_gblup_28c, temp28c_h2_mvgblup=temp28c_res$h2_mvgblup_28c)
+temp28c_h2_gblub &lt;- temp28c_h2$temp28c_h2_gblup
+temp28c_h2_gblub &lt;- as.data.frame(temp28c_h2_gblub)
+temp28c_h2_mvgblub &lt;- temp28c_h2$temp28c_h2_mvgblup
+temp28c_h2_mvgblub &lt;- as.data.frame(temp28c_h2_mvgblub)
+temp28c_h2_data &lt;- merge(temp28c_h2_gblub, temp28c_h2_mvgblub, by = 0)
+rownames(temp28c_h2_data) &lt;- temp28c_h2_data[,1]
+temp28c_h2_data &lt;- temp28c_h2_data[,-1]
+colnames(temp28c_h2_data) &lt;- c(&#39;Female_18c_uni&#39;,&#39;Female_18c_multi&#39;,&#39;Male_18c_uni&#39;,&#39;Male_18c_multi&#39;)
+
+
+###Finding average of 18c r2 data
+temp18c_r2_means &lt;- (colMeans(temp18c_r2_data, na.rm = TRUE))
+
+###Finding average of 18c h2 data
+temp18c_h2_means &lt;- (colMeans(temp18c_h2_data, na.rm = TRUE))
+
+#Fixing 18C data for Boxplot
+stacked_temp18c_r2_gblub &lt;- stack(temp18c_r2_gblub)
+vec &lt;- rep(&quot;Univariate&quot;, 100)
+stacked_temp18c_r2_gblub$Analysis &lt;- vec
+stacked_temp18c_r2_mvgblub &lt;- stack(temp18c_r2_mvgblub)
+vecmv &lt;- rep(&quot;Multiivariate&quot;, 100)
+stacked_temp18c_r2_mvgblub$Analysis &lt;- vecmv
+
+stacked_temp18c_h2_gblub &lt;- stack(temp18c_h2_gblub)
+vec &lt;- rep(&quot;Univariate&quot;, 100)
+stacked_temp18c_h2_gblub$Analysis &lt;- vec
+stacked_temp18c_h2_mvgblub &lt;- stack(temp18c_h2_mvgblub)
+vecmv &lt;- rep(&quot;Multiivariate&quot;, 100)
+stacked_temp18c_h2_mvgblub$Analysis &lt;- vecmv
+
+stacked_temp18c_r2_data &lt;- rbind(stacked_temp18c_r2_gblub, stacked_temp18c_r2_mvgblub)
+
+stacked_temp18c_h2_data &lt;- rbind(stacked_temp18c_h2_gblub, stacked_temp18c_h2_mvgblub)
+
+
+###Finding average of 25c r2 data
+temp25c_r2_means &lt;- (colMeans(temp25c_r2_data, na.rm = TRUE))
+
+###Finding average of 25c h2 data
+temp25c_h2_means &lt;- (colMeans(temp25c_h2_data, na.rm = TRUE))
+
+#Fixing 25C data for Boxplot
+stacked_temp25c_r2_gblub &lt;- stack(temp25c_r2_gblub)
+vec &lt;- rep(&quot;Univariate&quot;, 100)
+stacked_temp25c_r2_gblub$Analysis &lt;- vec
+stacked_temp25c_r2_mvgblub &lt;- stack(temp25c_r2_mvgblub)
+vecmv &lt;- rep(&quot;Multiivariate&quot;, 100)
+stacked_temp25c_r2_mvgblub$Analysis &lt;- vecmv
+
+stacked_temp25c_h2_gblub &lt;- stack(temp25c_h2_gblub)
+vec &lt;- rep(&quot;Univariate&quot;, 100)
+stacked_temp25c_h2_gblub$Analysis &lt;- vec
+stacked_temp25c_h2_mvgblub &lt;- stack(temp25c_h2_mvgblub)
+vecmv &lt;- rep(&quot;Multiivariate&quot;, 100)
+stacked_temp25c_h2_mvgblub$Analysis &lt;- vecmv
+
+stacked_temp25c_r2_data &lt;- rbind(stacked_temp25c_r2_gblub, stacked_temp25c_r2_mvgblub)
+
+stacked_temp25c_h2_data &lt;- rbind(stacked_temp25c_h2_gblub, stacked_temp25c_h2_mvgblub)
+
+
+###Finding average of 28c r2 data
+temp28c_r2_means &lt;- (colMeans(temp28c_r2_data, na.rm = TRUE))
+
+###Finding average of 28c h2 data
+temp28c_h2_means &lt;- (colMeans(temp28c_h2_data, na.rm = TRUE))
+
+#Fixing 28C data for Boxplot
+stacked_temp28c_r2_gblub &lt;- stack(temp28c_r2_gblub)
+vec &lt;- rep(&quot;Univariate&quot;, 100)
+stacked_temp28c_r2_gblub$Analysis &lt;- vec
+stacked_temp28c_r2_mvgblub &lt;- stack(temp28c_r2_mvgblub)
+vecmv &lt;- rep(&quot;Multiivariate&quot;, 100)
+stacked_temp28c_r2_mvgblub$Analysis &lt;- vecmv
+
+stacked_temp28c_h2_gblub &lt;- stack(temp28c_h2_gblub)
+vec &lt;- rep(&quot;Univariate&quot;, 100)
+stacked_temp28c_h2_gblub$Analysis &lt;- vec
+stacked_temp28c_h2_mvgblub &lt;- stack(temp28c_h2_mvgblub)
+vecmv &lt;- rep(&quot;Multiivariate&quot;, 100)
+stacked_temp28c_h2_mvgblub$Analysis &lt;- vecmv
+
+stacked_temp28c_r2_data &lt;- rbind(stacked_temp28c_r2_gblub, stacked_temp28c_r2_mvgblub)
+
+stacked_temp28c_h2_data &lt;- rbind(stacked_temp28c_h2_gblub, stacked_temp28c_h2_mvgblub)
+
+
+
+##18C Boxplot
+boxplot_18c &lt;- ggplot(stacked_temp18c_r2_data, aes(x=ind, y=values, fill = Analysis))+
+  geom_boxplot()+
+  labs(title = &#39;18C Heritability Plot&#39;, x = &#39;Temperature in Celcius&#39;, y = &#39;heritability&#39;)+
+  stat_summary(fun=mean, colour=&quot;darkred&quot;, geom=&quot;point&quot;,
+               shape=18, size=3, position = position_dodge2(width = 0.75,
+                                                            preserve = &quot;single&quot;))+
+  stat_summary(data = stacked_temp18c_h2_data, fun = mean, colour=&quot;blue&quot;,  geom=&quot;point&quot;,
+               shape=&quot;-&quot;, size=10, position = position_dodge2(width = 0.75,
+                                                                       preserve = &quot;single&quot;))
+boxplot_18c</code></pre>
+<p><img src="figure/Results.Rmd/unnamed-chunk-2-1.svg" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
+Past versions of unnamed-chunk-2-1.svg
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/21f3b95f05b86ef37a61d1fcbd520b9351be33c7/docs/figure/Results.Rmd/unnamed-chunk-2-1.svg" target="_blank">21f3b95</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-10
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/31c4f38a2a5f5383c8cfa6b58120acc8ef5f1df7/docs/figure/Results.Rmd/unnamed-chunk-2-1.svg" target="_blank">31c4f38</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-03
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/602717720efd4fe8b8a1fec63591555b8c73871a/docs/figure/Results.Rmd/unnamed-chunk-2-1.svg" target="_blank">6027177</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code>##25C Boxplot
+boxplot_25c &lt;- ggplot(stacked_temp25c_r2_data, aes(x=ind, y=values, fill = Analysis))+
+  geom_boxplot()+
+  labs(title = &#39;25C Heritability Plot&#39;, x = &#39;Temperature in Celcius&#39;, y = &#39;heritability&#39;)+
+  stat_summary(fun=mean, colour=&quot;darkred&quot;, geom=&quot;point&quot;,
+               shape=18, size=3, position = position_dodge2(width = 0.75,
+                                                            preserve = &quot;single&quot;))+
+  stat_summary(data = stacked_temp25c_h2_data, fun = mean, colour=&quot;blue&quot;,  geom=&quot;point&quot;,
+               shape=&quot;-&quot;, size=10, position = position_dodge2(width = 0.75,
+                                                                       preserve = &quot;single&quot;))
+
+boxplot_25c</code></pre>
+<p><img src="figure/Results.Rmd/unnamed-chunk-2-2.svg" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-2">
+Past versions of unnamed-chunk-2-2.svg
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/21f3b95f05b86ef37a61d1fcbd520b9351be33c7/docs/figure/Results.Rmd/unnamed-chunk-2-2.svg" target="_blank">21f3b95</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-10
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/31c4f38a2a5f5383c8cfa6b58120acc8ef5f1df7/docs/figure/Results.Rmd/unnamed-chunk-2-2.svg" target="_blank">31c4f38</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-03
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/602717720efd4fe8b8a1fec63591555b8c73871a/docs/figure/Results.Rmd/unnamed-chunk-2-2.svg" target="_blank">6027177</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code>##28C Boxplot
+boxplot_28c &lt;- ggplot(stacked_temp28c_r2_data, aes(x=ind, y=values, fill = Analysis))+
+  geom_boxplot()+
+  labs(title = &#39;28C Heritability Plot&#39;, x = &#39;Temperature in Celcius&#39;, y = &#39;heritability&#39;)+
+  stat_summary(fun=mean, colour=&quot;darkred&quot;, geom=&quot;point&quot;,
+               shape=18, size=3, position = position_dodge2(width = 0.75,
+                                                            preserve = &quot;single&quot;))+
+  stat_summary(data = stacked_temp28c_h2_data, fun = mean, colour=&quot;blue&quot;,  geom=&quot;point&quot;,
+               shape=&quot;-&quot;, size=10, position = position_dodge2(width = 0.75,
+                                                                       preserve = &quot;single&quot;))
+boxplot_28c</code></pre>
+<p><img src="figure/Results.Rmd/unnamed-chunk-2-3.svg" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-3">
+Past versions of unnamed-chunk-2-3.svg
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/21f3b95f05b86ef37a61d1fcbd520b9351be33c7/docs/figure/Results.Rmd/unnamed-chunk-2-3.svg" target="_blank">21f3b95</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-10
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/31c4f38a2a5f5383c8cfa6b58120acc8ef5f1df7/docs/figure/Results.Rmd/unnamed-chunk-2-3.svg" target="_blank">31c4f38</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-03
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/602717720efd4fe8b8a1fec63591555b8c73871a/docs/figure/Results.Rmd/unnamed-chunk-2-3.svg" target="_blank">6027177</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="full-data-analysis" class="section level2">
+<h2>Full Data Analysis</h2>
+<p>The boxplots below took all the available data for the lifespan of drosophila and performed univariate and multivariate analysis. The values of the boxplot consist of 50 observations of the R squared values. Within the boxplots the red diamond shows the mean of the R squared values and the blue line shows the mean of 50 observations of the heritability values.</p>
+<pre class="r"><code>library(ggplot2)
+
+###Reading in results
+all_res &lt;- readRDS(&quot;/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_all.rds&quot;)
+
+###r2 data loaded into one file, then seperated and made into data frames
+all_r2 &lt;- list(r2_gblup=all_res$r2_gblup, r2_mvgblup=all_res$r2_mvgblup)
+r2_gblub &lt;- all_r2$r2_gblup
+r2_gblub &lt;- as.data.frame(r2_gblub)
+r2_mvgblub &lt;- all_r2$r2_mvgblup
+r2_mvgblub &lt;- as.data.frame(r2_mvgblub)
+r2_data &lt;- merge(r2_gblub, r2_mvgblub, by = 0)
+rownames(r2_data) &lt;- r2_data[,1]
+r2_data &lt;- r2_data[,-1]
+r2_data &lt;- r2_data[, c(1,7,2,8,3,9,4,10,5,11,6,12)]
+colnames(r2_data) &lt;- c(&#39;Female_18c_uni&#39;,&#39;Female_18c_multi&#39;,&#39;Female_25c_uni&#39;,&#39;Female_25c_multi&#39;,&#39;Female_28c_uni&#39;,&#39;Female_28c_multi&#39;,&#39;Male_18c_uni&#39;,&#39;Male_18c_multi&#39;,&#39;Male_25c_uni&#39;,&#39;Male_25c_multi&#39;,&#39;Male_28c_uni&#39;,&#39;Male_28c_multi&#39;)
+
+
+###h2 data loaded into one file, then seperated and made into data frames
+all_h2 &lt;- list(h2_gblup=all_res$h2_gblup, h2_mvgblup=all_res$h2_mvgblup)
+h2_gblub &lt;- all_h2$h2_gblup
+h2_gblub &lt;- as.data.frame(h2_gblub)
+h2_mvgblub &lt;- all_h2$h2_mvgblup
+h2_mvgblub &lt;- as.data.frame(h2_mvgblub)
+h2_data &lt;- merge(h2_gblub, h2_mvgblub, by = 0)
+rownames(h2_data) &lt;- h2_data[,1]
+h2_data &lt;- h2_data[,-1]
+h2_data &lt;- h2_data[, c(1,7,2,8,3,9,4,10,5,11,6,12)]
+colnames(h2_data) &lt;- c(&#39;Female_18c_uni&#39;,&#39;Female_18c_multi&#39;,&#39;Female_25c_uni&#39;,&#39;Female_25c_multi&#39;,&#39;Female_28c_uni&#39;,&#39;Female_28c_multi&#39;,&#39;Male_18c_uni&#39;,&#39;Male_18c_multi&#39;,&#39;Male_25c_uni&#39;,&#39;Male_25c_multi&#39;,&#39;Male_28c_uni&#39;,&#39;Male_28c_multi&#39;)
+
+
+###Finding average of r2 data
+r2_means &lt;- (colMeans(r2_data, na.rm = TRUE))
+
+###Finding average of h2 data
+h2_means &lt;- (colMeans(h2_data, na.rm = TRUE))
+
+#Fixing data for Boxplot
+stacked_r2_gblub &lt;- stack(r2_gblub)
+vec &lt;- rep(&quot;Univariate&quot;, 100)
+stacked_r2_gblub$Analysis &lt;- vec
+stacked_r2_mvgblub &lt;- stack(r2_mvgblub)
+vecmv &lt;- rep(&quot;Multiivariate&quot;, 100)
+stacked_r2_mvgblub$Analysis &lt;- vecmv
+
+stacked_h2_gblub &lt;- stack(h2_gblub)
+vec &lt;- rep(&quot;Univariate&quot;, 100)
+stacked_h2_gblub$Analysis &lt;- vec
+stacked_h2_mvgblub &lt;- stack(h2_mvgblub)
+vecmv &lt;- rep(&quot;Multiivariate&quot;, 100)
+stacked_h2_mvgblub$Analysis &lt;- vecmv
+
+stacked_r2_data &lt;- rbind(stacked_r2_gblub, stacked_r2_mvgblub)
+
+stacked_h2_data &lt;- rbind(stacked_h2_gblub, stacked_h2_mvgblub)
+
+
+##Boxplot
+boxplot &lt;- ggplot(stacked_r2_data, aes(x=ind, y=values, fill = Analysis))+
+  geom_boxplot()+
+  labs(title = &#39;Heritability Plot&#39;, x = &#39;Temperature and Sex Groups&#39;, y = &#39;heritability&#39;)+
+  stat_summary(fun=mean, colour=&quot;darkred&quot;, geom=&quot;point&quot;,
+               shape=18, size=3, position = position_dodge2(width = 0.75,
+                                                            preserve = &quot;single&quot;))+
+  stat_summary(data = stacked_h2_data, fun = mean, colour=&quot;blue&quot;,  geom=&quot;point&quot;,
+               shape=&quot;-&quot;, size=10, position = position_dodge2(width = 0.75,
+                                                              preserve = &quot;single&quot;))
+boxplot</code></pre>
+<p><img src="figure/Results.Rmd/unnamed-chunk-3-1.svg" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.svg
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/21f3b95f05b86ef37a61d1fcbd520b9351be33c7/docs/figure/Results.Rmd/unnamed-chunk-3-1.svg" target="_blank">21f3b95</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-10
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/31c4f38a2a5f5383c8cfa6b58120acc8ef5f1df7/docs/figure/Results.Rmd/unnamed-chunk-3-1.svg" target="_blank">31c4f38</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-03
+</td>
+</tr>
+<tr>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/602717720efd4fe8b8a1fec63591555b8c73871a/docs/figure/Results.Rmd/unnamed-chunk-3-1.svg" target="_blank">6027177</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-01
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.3 (2020-10-10)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: CentOS Linux 7 (Core)
+
+Matrix products: default
+BLAS/LAPACK: /opt/ohpc/pub/Software/openblas_0.3.10/lib/libopenblas_haswellp-r0.3.10.dev.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] ggplot2_3.3.5   workflowr_1.7.0
+
+loaded via a namespace (and not attached):
+ [1] tidyselect_1.1.1 xfun_0.29        bslib_0.3.1      purrr_0.3.4     
+ [5] colorspace_2.0-2 vctrs_0.3.8      generics_0.1.1   htmltools_0.5.2 
+ [9] yaml_2.2.2       utf8_1.2.2       rlang_1.0.1      jquerylib_0.1.4 
+[13] later_1.3.0      pillar_1.6.4     glue_1.6.0       withr_2.4.3     
+[17] DBI_1.1.2        lifecycle_1.0.1  stringr_1.4.0    munsell_0.5.0   
+[21] gtable_0.3.0     evaluate_0.14    labeling_0.4.2   knitr_1.37      
+[25] callr_3.7.0      fastmap_1.1.0    httpuv_1.6.5     ps_1.6.0        
+[29] fansi_1.0.2      highr_0.9        Rcpp_1.0.8       promises_1.2.0.1
+[33] scales_1.1.1     jsonlite_1.7.3   farver_2.1.0     fs_1.5.2        
+[37] digest_0.6.29    stringi_1.7.6    processx_3.5.2   dplyr_1.0.8     
+[41] getPass_0.2-2    rprojroot_2.0.2  grid_4.0.3       cli_3.1.1       
+[45] tools_4.0.3      magrittr_2.0.2   sass_0.4.0       tibble_3.1.6    
+[49] crayon_1.4.2     whisker_0.4      pkgconfig_2.0.3  ellipsis_0.3.2  
+[53] assertthat_0.2.1 rmarkdown_2.11   httr_1.4.2       rstudioapi_0.13 
+[57] R6_2.5.1         git2r_0.29.0     compiler_4.0.3  </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

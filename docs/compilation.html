@@ -1,0 +1,2161 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Data Analysis</title>
+
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/spacelab.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Coyne Project</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/CoyneProject">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Data Analysis</h1>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2022-03-24
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>CoyneProject/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version 1.7.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20220228code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20220228)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20220228code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20220228)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomCoyneProjectCoyneProjecttreec0f49755d2c216b799953a25966f05cc0cef045ctargetblankc0f4975a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/CoyneProject/CoyneProject/tree/c0f49755d2c216b799953a25966f05cc0cef045c" target="_blank">c0f4975</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomCoyneProjectCoyneProjecttreec0f49755d2c216b799953a25966f05cc0cef045ctargetblankc0f4975a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/CoyneProject/CoyneProject/tree/c0f49755d2c216b799953a25966f05cc0cef045c" target="_blank">c0f4975</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .RData
+    Ignored:    .Rproj.user/
+
+Unstaged changes:
+    Modified:   analysis/Background.Rmd
+    Modified:   analysis/Results.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/compilation.Rmd</code>) and HTML (<code>docs/compilation.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/c0f49755d2c216b799953a25966f05cc0cef045c/analysis/compilation.Rmd" target="_blank">c0f4975</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-24
+</td>
+<td>
+details
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/CoyneProject/CoyneProject/74e76caea4bcab134381824afdc10bc2bd91abf2/docs/compilation.html" target="_blank">74e76ca</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-24
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/8146a60ff104fc1f447251d72d28558768a6d32f/analysis/compilation.Rmd" target="_blank">8146a60</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-24
+</td>
+<td>
+details
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/CoyneProject/CoyneProject/baf9be9ed01757a5c286a6f51c07897c2bc97739/docs/compilation.html" target="_blank">baf9be9</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/CoyneProject/CoyneProject/d0ec4f25a8139c0adac22d3f29d9e8adb1ff5fed/docs/compilation.html" target="_blank">d0ec4f2</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/CoyneProject/CoyneProject/74df01c73f8edae74d2bd8ce426b624734fdf92d/docs/compilation.html" target="_blank">74df01c</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/CoyneProject/CoyneProject/0fe0e4d71047fe8276236123c20537b1961d4ca9/docs/compilation.html" target="_blank">0fe0e4d</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/CoyneProject/CoyneProject/721e56b783b7c5b5bef08545430e6a5f1835626f/docs/compilation.html" target="_blank">721e56b</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-10
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/CoyneProject/CoyneProject/blob/2132111f94502da737579cd104123ba654e30d64/analysis/compilation.Rmd" target="_blank">2132111</a>
+</td>
+<td>
+kcoyne998
+</td>
+<td>
+2022-03-10
+</td>
+<td>
+Trying to get code dropdown
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<p>The following sets contain the code that was used to analyze the drosophila data, first in categories based on either sex or environment, then all together. The first two sets separate the data into Female and Male groups, and the following three separate the data by temperature environment: 18C, 25C, and 28C. The final set analyzes all the the data in one group.</p>
+<div id="female" class="section level2">
+<h2>Female</h2>
+<pre class="r"><code>###Load libraries
+library(qgg)
+library(matrixStats)
+library(data.table)
+library(dplyr)
+
+###Set seed for random number generator
+set.seed(12)
+
+###Function to compute accuracy
+compute_accuracy &lt;- function(Y, Yhat) {
+  bias &lt;- rep(as.numeric(NA), ncol(Y))
+  r2 &lt;- rep(as.numeric(NA), ncol(Y))
+  rmse &lt;- rep(as.numeric(NA), ncol(Y))
+
+  for(i in 1:ncol(Y)){
+    fit_1  &lt;- lm(Y[, i] ~ Yhat[, i])
+    bias[i] &lt;- coef(fit_1)[2]
+    r2[i] &lt;- summary(fit_1)$r.squared
+    rmse[i] &lt;- sqrt(mean((Y[, i] - Yhat[, i])^2))
+  }
+  ##Calculation std dev of the columns
+  return(list(bias=bias, r2=r2, rmse=rmse, scaled_rmse=rmse/matrixStats::colSds(Y)))
+}
+
+
+###Get data from secretariat
+female_18c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/female_18c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Female_18c&quot;))
+female_25c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/female_25c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Female_25c&quot;))
+female_28c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/female_28c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Female_28c&quot;))
+
+
+###Merging data into female table
+female_data &lt;- merge(female_18c_mean_pheno, female_25c_mean_pheno,by=&quot;Line&quot;, all=TRUE)
+female_data &lt;- merge(female_data, female_28c_mean_pheno, by=&quot;Line&quot;, all=TRUE)
+female_data &lt;- na.omit(female_data)
+row.names(female_data) &lt;- female_data$Line
+female_data &lt;- female_data[,-1]
+
+
+###Reading in genotype data and transposing, combine with phenotype data and removed NA rows
+dgrp_genotype &lt;- fread(&quot;/data/morgante_lab/data/dgrp/genotypes/dgrp2_tgeno_filtered_meanimputed.txt&quot;, header = TRUE, data.table=FALSE, nThread = 2)
+rownames(dgrp_genotype) &lt;- dgrp_genotype[, 1]
+dgrp_genotype &lt;- dgrp_genotype[, -1]
+dgrp_genotype &lt;- t(dgrp_genotype)
+
+#dgrp_female_merge &lt;- merge(female_data, dgrp_genotype,by=0)
+#dgrp_genotype &lt;- subset(dgrp_female_merge, select = -c(Female_18c, Female_25c, Female_28c))
+#dgrp_genotype &lt;- data.frame(dgrp_genotype, row.names = 1)
+dgrp_genotype &lt;- dgrp_genotype[rownames(female_data), ]
+
+
+###Making phenotyp tables Matrices
+female_data &lt;- as.matrix(female_data)
+
+###Compute GRM
+W &lt;- scale(dgrp_genotype, center=TRUE, scale=TRUE)
+GRM &lt;- tcrossprod(W)/ncol(W)
+
+###Set number of replicates
+ncreps &lt;- 50
+
+###FEMALE STUFF STARTS
+
+###Compute size of the test set
+test_size_FEMALE &lt;- ceiling(nrow(female_data)*0.2)
+
+###Objects to store prediction performance
+r2_mvgblup_FEMALE &lt;- matrix(as.numeric(NA), ncreps, ncol(female_data))
+colnames(r2_mvgblup_FEMALE) &lt;- colnames(female_data)
+rownames(r2_mvgblup_FEMALE) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+r2_gblup_FEMALE &lt;- matrix(as.numeric(NA), ncreps, ncol(female_data))
+colnames(r2_gblup_FEMALE) &lt;- colnames(female_data)
+rownames(r2_gblup_FEMALE) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+
+###Objects to store heritability performance
+h2_mvgblup_FEMALE &lt;- matrix(as.numeric(NA), ncreps, ncol(female_data))
+colnames(h2_mvgblup_FEMALE) &lt;- colnames(female_data)
+rownames(h2_mvgblup_FEMALE) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+h2_gblup_FEMALE &lt;- matrix(as.numeric(NA), ncreps, ncol(female_data))
+colnames(h2_gblup_FEMALE) &lt;- colnames(female_data)
+rownames(h2_gblup_FEMALE) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+
+###Objects for the rg data
+female_18_female_25 &lt;- matrix(as.numeric(NA), ncreps, 1)
+female_18_female_28 &lt;- matrix(as.numeric(NA), ncreps, 1)
+female_25_female_28 &lt;- matrix(as.numeric(NA), ncreps, 1)
+
+
+###Cross-validation
+###Do crep=1 in console to do for loop line by line
+for(crep in 1:ncreps){
+  ###Sample individuals for the test set
+  testset_idx_FEMALE &lt;- sort(sample(x=1:nrow(female_data), size=test_size_FEMALE, replace=FALSE))
+  testset_ids_FEMALE &lt;- rownames(female_data)[testset_idx_FEMALE]
+  traingset_ids_FEMALE &lt;- rownames(female_data)[-testset_idx_FEMALE]
+
+  ###Fit multivariate Bayesian GBLUP
+  GRMlist &lt;- list(Set1=GRM)
+  fit_mvg_FEMALE &lt;- gbayes(y=female_data[traingset_ids_FEMALE, ], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+
+  ###Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_mvg_FEMALE)!=0){
+    ##Extract the predictions
+    Yhat_mvgblup_FEMALE &lt;- matrix(as.numeric(NA), nrow=length(testset_ids_FEMALE), ncol=ncol(female_data))##Changed as.numeric(NA) to traingset_ids
+    for(t in 1:ncol(female_data)){
+      Yhat_mvgblup_FEMALE[, t] &lt;- fit_mvg_FEMALE$g[testset_ids_FEMALE, t] + fit_mvg_FEMALE$mu[t]
+    }
+    ##Compute accuracy
+    r2_mvgblup_FEMALE[crep, ] &lt;- compute_accuracy(female_data[testset_ids_FEMALE, ], Yhat_mvgblup_FEMALE)$r2
+  } else {
+    r2_mvgblup_FEMALE[crep, ] &lt;- rep(NA, ncol(female_data))
+    warning(paste0(&quot;Something went wrong in mvGBLUP in rep &quot;, crep, &quot;. Go back and check!&quot;))
+  }
+  ##Getting mv heritability matrix
+  if(length(fit_mvg_FEMALE)!=0){
+    for(t in 1:ncol(female_data)){
+      Yhat_mvgblup_FEMALE[, t] &lt;- fit_mvg_FEMALE$g[testset_ids_FEMALE, t] + fit_mvg_FEMALE$mu[t]
+    }
+    ##Compute accuracy
+    h2_mvgblup_FEMALE[crep, ] &lt;- fit_mvg_FEMALE$h2
+  } else {
+    h2_mvgblup_FEMALE[crep, ] &lt;- rep(NA, ncol(female_data))
+    warning(paste0(&quot;Something went wrong in mvGBLUP in rep &quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ###Fit univariate Bayesian GBLUP #1 FEMALE
+  fit_FEMALE_1 &lt;- gbayes(y=female_data[traingset_ids_FEMALE, 1], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+  fit_gblup_y1_FEMALE &lt;- fit_FEMALE_1$mu+drop(fit_FEMALE_1$g[testset_idx_FEMALE])
+
+  ##Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_gblup_y1_FEMALE) != 0){
+    ##Extract the predictions
+    yhat1_gblup_FEMALE &lt;- fit_FEMALE_1$g[testset_idx_FEMALE] + fit_FEMALE_1$mu
+
+    ##Compute accuracy
+    r2_gblup_FEMALE[crep, 1] &lt;- compute_accuracy(female_data[testset_ids_FEMALE, 1, drop=FALSE], as.matrix(yhat1_gblup_FEMALE, ncol=1))$r2
+  } else {
+    r2_gblup_FEMALE[crep, 1] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y1 in rep&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ##Getting the list of heritability
+  if(length(fit_gblup_y1_FEMALE) != 0){
+    ##Making Heritability matrix
+    h2_gblup_FEMALE[crep, 1] &lt;- fit_FEMALE_1$h2
+  } else {
+    h2_gblup_FEMALE[crep, 1] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y1 in h2&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+
+  ###Fit univariate Bayesian GBLUP #2 FEMALE
+  fit_FEMALE_2 &lt;- gbayes(y=female_data[traingset_ids_FEMALE, 2], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+  fit_gblup_y2_FEMALE &lt;- fit_FEMALE_2$mu+drop(fit_FEMALE_2$g[testset_idx_FEMALE])
+
+  ##Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_gblup_y2_FEMALE) != 0){
+    ##Extract the predictions
+    yhat2_gblup_FEMALE &lt;- fit_FEMALE_2$g[testset_idx_FEMALE] + fit_FEMALE_2$mu
+
+    ##Compute accuracy
+    r2_gblup_FEMALE[crep, 2] &lt;- compute_accuracy(female_data[testset_ids_FEMALE, 1, drop=FALSE], as.matrix(yhat2_gblup_FEMALE, ncol=1))$r2
+  } else {
+    r2_gblup_FEMALE[crep, 2] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y2 in rep&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+
+  ##Getting the list of heritability
+  if(length(fit_gblup_y2_FEMALE) != 0){
+    ##Making Heritability matrix
+    h2_gblup_FEMALE[crep, 2] &lt;- fit_FEMALE_2$h2
+  } else {
+    h2_gblup_FEMALE[crep, 2] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y2 in h2&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ###Fit univariate Bayesian GBLUP #3 FEMALE
+  fit_FEMALE_3 &lt;- gbayes(y=female_data[traingset_ids_FEMALE, 3], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+  fit_gblup_y3_FEMALE &lt;- fit_FEMALE_3$mu+drop(fit_FEMALE_3$g[testset_idx_FEMALE])
+
+  ##Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_gblup_y3_FEMALE) != 0){
+    ##Extract the predictions
+    yhat3_gblup_FEMALE &lt;- fit_FEMALE_3$g[testset_idx_FEMALE] + fit_FEMALE_3$mu
+
+    ##Compute accuracy
+    r2_gblup_FEMALE[crep, 3] &lt;- compute_accuracy(female_data[testset_ids_FEMALE, 1, drop=FALSE], as.matrix(yhat3_gblup_FEMALE, ncol=1))$r2
+  } else {
+    r2_gblup_FEMALE[crep, 3] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y3 in rep&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ##Getting the list of heritability
+  if(length(fit_gblup_y3_FEMALE) != 0){
+    ##Making Heritability matrix
+    h2_gblup_FEMALE[crep, 3] &lt;- fit_FEMALE_3$h2
+  } else {
+    h2_gblup_FEMALE[crep, 3] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y3 in h2&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  rg &lt;- as.list(fit_mvg_FEMALE[[&quot;rg&quot;]])
+  female_18_female_25[crep, ] &lt;- rg[[2]]
+  female_18_female_28[crep, ] &lt;- rg[[3]]
+  female_25_female_28[crep, ] &lt;- rg[[6]]
+
+  cat(&quot;Finished replicate&quot;, crep, &quot;\n&quot;)
+}
+
+
+
+##Puts resutls in a list matrix
+res_female &lt;- list(h2_gblup_FEMALE=h2_gblup_FEMALE, h2_mvgblup_FEMALE=h2_mvgblup_FEMALE, r2_gblup_FEMALE=r2_gblup_FEMALE, r2_mvgblup_FEMALE=r2_mvgblup_FEMALE)
+
+res_rg &lt;- list(female_18_female_25=female_18_female_25,
+               female_18_female_28=female_18_female_28,
+               female_25_female_28=female_25_female_28)
+
+###Save results
+saveRDS(res_female, &quot;/data/morgante_lab/kcoyne/mv_project/gblup_vs_mvgblup_drosophila_h2_female.rds&quot;)
+
+saveRDS(res_rg, &quot;/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_rg_female.rds&quot;)</code></pre>
+</div>
+<div id="male" class="section level2">
+<h2>Male</h2>
+<pre class="r"><code>###Load libraries
+library(qgg)
+library(matrixStats)
+library(data.table)
+library(dplyr)
+
+###Set seed for random number generator
+set.seed(12)
+
+###Function to compute accuracy
+compute_accuracy &lt;- function(Y, Yhat) {
+  bias &lt;- rep(as.numeric(NA), ncol(Y))
+  r2 &lt;- rep(as.numeric(NA), ncol(Y))
+  rmse &lt;- rep(as.numeric(NA), ncol(Y))
+
+  for(i in 1:ncol(Y)){
+    fit_1  &lt;- lm(Y[, i] ~ Yhat[, i])
+    bias[i] &lt;- coef(fit_1)[2]
+    r2[i] &lt;- summary(fit_1)$r.squared
+    rmse[i] &lt;- sqrt(mean((Y[, i] - Yhat[, i])^2))
+  }
+  ##Calculation std dev of the columns
+  return(list(bias=bias, r2=r2, rmse=rmse, scaled_rmse=rmse/matrixStats::colSds(Y)))
+}
+
+
+###Get data from secretariat
+male_18c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/male_18c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Male_18c&quot;))
+male_25c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/male_25c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Male_25c&quot;))
+male_28c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/male_28c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Male_28c&quot;))
+
+
+###Merging into male table
+male_data &lt;- merge(male_18c_mean_pheno, male_25c_mean_pheno,by=&quot;Line&quot;, all=TRUE)
+male_data &lt;- merge(male_data, male_28c_mean_pheno, by=&quot;Line&quot;, all= TRUE)
+male_data &lt;- na.omit(male_data)
+row.names(male_data) &lt;- male_data$Line
+male_data &lt;- male_data[,-1]
+
+###Reading in genotype data and transposing, combine with phenotype data and removed NA rows
+dgrp_genotype &lt;- fread(&quot;/data/morgante_lab/data/dgrp/genotypes/dgrp2_tgeno_filtered_meanimputed.txt&quot;, header = TRUE, data.table=FALSE, nThread = 2)
+rownames(dgrp_genotype) &lt;- dgrp_genotype[, 1]
+dgrp_genotype &lt;- dgrp_genotype[, -1]
+dgrp_genotype &lt;- t(dgrp_genotype)
+
+dgrp_genotype &lt;- dgrp_genotype[rownames(male_data), ]
+
+
+###Making phenotyp tables Matrices
+male_data &lt;- data.matrix(male_data)
+
+###Compute GRM
+W &lt;- scale(dgrp_genotype, center=TRUE, scale=TRUE)
+GRM &lt;- tcrossprod(W)/ncol(W)
+
+###Set number of replicates
+ncreps &lt;- 50
+
+### MALE Specific Code BEGINS
+
+###Compute size of the test set
+test_size_MALE &lt;- ceiling(nrow(male_data)*0.2)
+
+###Objects to store prediction performance
+r2_mvgblup_MALE &lt;- matrix(as.numeric(NA), ncreps, ncol(male_data))
+colnames(r2_mvgblup_MALE) &lt;- colnames(male_data)
+rownames(r2_mvgblup_MALE) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+r2_gblup_MALE &lt;- matrix(as.numeric(NA), ncreps, ncol(male_data))
+colnames(r2_gblup_MALE) &lt;- colnames(male_data)
+rownames(r2_gblup_MALE) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+
+###Objects to store heritability performance
+h2_mvgblup_MALE &lt;- matrix(as.numeric(NA), ncreps, ncol(male_data))
+colnames(h2_mvgblup_MALE) &lt;- colnames(male_data)
+rownames(h2_mvgblup_MALE) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+h2_gblup_MALE &lt;- matrix(as.numeric(NA), ncreps, ncol(male_data))
+colnames(h2_gblup_MALE) &lt;- colnames(male_data)
+rownames(h2_gblup_MALE) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+
+###Objects for the rg data
+male_18_male_25 &lt;- matrix(as.numeric(NA), ncreps, 1)
+male_18_male_28 &lt;- matrix(as.numeric(NA), ncreps, 1)
+male_25_male_28 &lt;- matrix(as.numeric(NA), ncreps, 1)
+
+###Cross-validation
+###Do crep=1 in console to do for loop line by line
+for(crep in 1:ncreps){
+  ###Sample individuals for the test set
+  testset_idx_MALE &lt;- sort(sample(x=1:nrow(male_data), size=test_size_MALE, replace=FALSE))
+  testset_ids_MALE &lt;- rownames(male_data)[testset_idx_MALE]
+  traingset_ids_MALE &lt;- rownames(male_data)[-testset_idx_MALE]
+
+  ###Split data in training and test sets
+  male_data_train &lt;- male_data
+  colnames(male_data_train) &lt;- paste0(&quot;Y&quot;, 1:ncol(male_data))
+
+
+  ###Fit multivariate Bayesian GBLUP
+  GRMlist &lt;- list(Set1=GRM)
+  fit_mvg_MALE &lt;- gbayes(y=male_data[traingset_ids_MALE, ], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+
+  ###Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_mvg_MALE)!=0){
+    ##Extract the predictions
+    Yhat_mvgblup_MALE &lt;- matrix(as.numeric(NA), nrow=length(testset_ids_MALE), ncol=ncol(male_data))##Changed as.numeric(NA) to traingset_ids
+    for(t in 1:ncol(male_data)){
+      Yhat_mvgblup_MALE[, t] &lt;- fit_mvg_MALE$g[testset_ids_MALE, t] + fit_mvg_MALE$mu[t]
+    }
+
+    ##Compute accuracy
+    r2_mvgblup_MALE[crep, ] &lt;- compute_accuracy(male_data[testset_ids_MALE, ], Yhat_mvgblup_MALE)$r2
+  } else {
+    r2_mvgblup_MALE[crep, ] &lt;- rep(NA, ncol(male_data))
+    warning(paste0(&quot;Something went wrong in mvGBLUP_MALE in rep &quot;, crep, &quot;. Go back and check!&quot;))
+  }
+  ##Getting mv heritability matrix
+  if(length(fit_mvg_MALE)!=0){
+    for(t in 1:ncol(male_data)){
+      Yhat_mvgblup_MALE[, t] &lt;- fit_mvg_MALE$g[testset_ids_MALE, t] + fit_mvg_MALE$mu[t]
+    }
+    ##Compute accuracy
+    h2_mvgblup_MALE[crep, ] &lt;- fit_mvg_MALE$h2
+  } else {
+    h2_mvgblup_MALE[crep, ] &lt;- rep(NA, ncol(male_data))
+    warning(paste0(&quot;Something went wrong in mvGBLUP in rep &quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ###Fit univariate Bayesian GBLUP #1
+  fit_MALE_1 &lt;- gbayes(y=male_data[traingset_ids_MALE, 1], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+  fit_gblup_y1_MALE &lt;- fit_MALE_1$mu+drop(fit_MALE_1$g[testset_idx_MALE])
+
+  ##Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_gblup_y1_MALE) != 0){
+    ##Extract the predictions
+    yhat1_gblup_MALE &lt;- fit_MALE_1$g[testset_idx_MALE] + fit_MALE_1$mu
+
+    ##Compute accuracy
+    r2_gblup_MALE[crep, 1] &lt;- compute_accuracy(male_data[testset_ids_MALE, 1, drop=FALSE], as.matrix(yhat1_gblup_MALE, ncol=1))$r2
+  } else {
+    r2_gblup_MALE[crep, 1] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP_MALE for y1 in rep&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+  ##Getting list of Heritability
+  if(length(fit_gblup_y1_MALE) != 0){
+    ##Making Heritability Matrix
+    h2_gblup_MALE[crep, 1] &lt;- fit_MALE_1$h2
+  } else {
+    h2_gblup_MALE[crep, 1] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP_MALE for y1 in h2&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ###Fit univariate Bayesian GBLUP #2 MALE
+  fit_MALE_2 &lt;- gbayes(y=male_data[traingset_ids_MALE, 2], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+  fit_gblup_y2_MALE &lt;- fit_MALE_2$mu+drop(fit_MALE_2$g[testset_idx_MALE])
+
+  ##Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_gblup_y2_MALE) != 0){
+    ##Extract the predictions
+    yhat2_gblup_MALE &lt;- fit_MALE_2$g[testset_idx_MALE] + fit_MALE_2$mu
+    ##Compute accuracy
+    r2_gblup_MALE[crep, 2] &lt;- compute_accuracy(male_data[testset_ids_MALE, 1, drop=FALSE], as.matrix(yhat2_gblup_MALE, ncol=1))$r2
+  } else {
+    r2_gblup_MALE[crep, 2] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP_MALE for y2 in rep&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ##Getting list of Heritability
+  if(length(fit_gblup_y2_MALE) != 0){
+   ##Heritability Matrix
+    h2_gblup_MALE[crep, 2] &lt;- fit_MALE_2$h2
+  } else {
+    h2_gblup_MALE[crep, 2] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP_MALE for y2 in h2&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+
+  ###Fit univariate Bayesian GBLUP #3 MALE
+  fit_MALE_3 &lt;- gbayes(y=male_data[traingset_ids_MALE, 3], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+  fit_gblup_y3_MALE &lt;- fit_MALE_3$mu+drop(fit_MALE_3$g[testset_idx_MALE])
+
+  ##Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_gblup_y3_MALE) != 0){
+    ##Extract the predictions
+    yhat3_gblup_MALE &lt;- fit_MALE_3$g[testset_idx_MALE] + fit_MALE_3$mu
+    ##Compute accuracy
+    r2_gblup_MALE[crep, 3] &lt;- compute_accuracy(male_data[testset_ids_MALE, 1, drop=FALSE], as.matrix(yhat3_gblup_MALE, ncol=1))$r2
+  } else {
+    r2_gblup_MALE[crep, 3] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP_MALE for y3 in rep&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ##Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_gblup_y3_MALE) != 0){
+    ##Compute accuracy
+    h2_gblup_MALE[crep, 3] &lt;- fit_MALE_3$h2
+  } else {
+    h2_gblup_MALE[crep, 3] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP_MALE for y3 in h2&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  rg &lt;- as.list(fit_mvg_MALE[[&quot;rg&quot;]])
+  male_18_male_25[crep, ] &lt;- rg[[2]]
+  male_18_male_28[crep, ] &lt;- rg[[3]]
+  male_25_male_28[crep, ] &lt;- rg[[6]]
+
+  cat(&quot;Finished replicate&quot;, crep, &quot;\n&quot;)
+}
+
+
+##Puts resutls in a list matrix
+res_male &lt;- list(h2_gblup_MALE=h2_gblup_MALE, h2_mvgblup_MALE=h2_mvgblup_MALE, r2_gblup_MALE=r2_gblup_MALE, r2_mvgblup_MALE=r2_mvgblup_MALE)
+
+res_rg &lt;- list(male_18_male_25=male_18_male_25,
+               male_18_male_28=male_18_male_28,
+               male_25_male_28=male_25_male_28)
+
+###Save results
+saveRDS(res_male, &quot;/data/morgante_lab/kcoyne/mv_project/gblup_vs_mvgblup_drosophila_h2_male.rds&quot;)
+
+saveRDS(res_rg, &quot;/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_rg_male.rds&quot;)</code></pre>
+</div>
+<div id="c" class="section level2">
+<h2>18C</h2>
+<pre class="r"><code>###Load libraries
+library(qgg)
+library(matrixStats)
+library(data.table)
+library(dplyr)
+
+###Set seed for random number generator
+set.seed(12)
+
+###Function to compute accuracy
+compute_accuracy &lt;- function(Y, Yhat) {
+  bias &lt;- rep(as.numeric(NA), ncol(Y))
+  r2 &lt;- rep(as.numeric(NA), ncol(Y))
+  rmse &lt;- rep(as.numeric(NA), ncol(Y))
+
+  for(i in 1:ncol(Y)){
+    fit_1  &lt;- lm(Y[, i] ~ Yhat[, i])
+    bias[i] &lt;- coef(fit_1)[2]
+    r2[i] &lt;- summary(fit_1)$r.squared
+    rmse[i] &lt;- sqrt(mean((Y[, i] - Yhat[, i])^2))
+  }
+  ##Calculation std dev of the columns
+  return(list(bias=bias, r2=r2, rmse=rmse, scaled_rmse=rmse/matrixStats::colSds(Y)))
+}
+
+
+###Get data from secretariat
+female_18c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/female_18c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Female_18c&quot;))
+female_25c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/female_25c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Female_25c&quot;))
+female_28c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/female_28c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Female_28c&quot;))
+
+###Merging data into female table
+female_data &lt;- merge(female_18c_mean_pheno, female_25c_mean_pheno,by=&quot;Line&quot;, all=TRUE)
+female_data &lt;- merge(female_data, female_28c_mean_pheno, by=&quot;Line&quot;, all=TRUE)
+female_data &lt;- na.omit(female_data)
+row.names(female_data) &lt;- female_data$Line
+female_data &lt;- female_data[,-1]
+
+###Get data from secretariat
+male_18c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/male_18c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Male_18c&quot;))
+male_25c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/male_25c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Male_25c&quot;))
+male_28c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/male_28c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Male_28c&quot;))
+
+###Merging into male table
+male_data &lt;- merge(male_18c_mean_pheno, male_25c_mean_pheno,by=&quot;Line&quot;, all=TRUE)
+male_data &lt;- merge(male_data, male_28c_mean_pheno, by=&quot;Line&quot;, all= TRUE)
+male_data &lt;- na.omit(male_data)
+row.names(male_data) &lt;- male_data$Line
+male_data &lt;- male_data[,-1]
+
+
+###Need to make table with female and male 18c
+data_18c &lt;- merge(female_data, male_data, by = 0)
+row.names(data_18c) &lt;- data_18c[,1]
+data_18c &lt;- data_18c[,-1]
+data_18c &lt;- subset(data_18c, select = -c(2,3,5,6))
+
+
+###Reading in genotype data and transposing, combine with phenotype data and removed NA rows
+dgrp_genotype &lt;- fread(&quot;/data/morgante_lab/data/dgrp/genotypes/dgrp2_tgeno_filtered_meanimputed.txt&quot;, header = TRUE, data.table=FALSE, nThread = 2)
+rownames(dgrp_genotype) &lt;- dgrp_genotype[, 1]
+dgrp_genotype &lt;- dgrp_genotype[, -1]
+dgrp_genotype &lt;- t(dgrp_genotype)
+###Aligning dgrp to number of observations with phenotypes
+dgrp_genotype &lt;- dgrp_genotype[rownames(data_18c), ]
+
+
+###Making phenotyp tables Matrices
+data_18c &lt;- as.matrix(data_18c)
+
+###Compute GRM
+W &lt;- scale(dgrp_genotype, center=TRUE, scale=TRUE)
+GRM &lt;- tcrossprod(W)/ncol(W)
+
+###Set number of replicates
+ncreps &lt;- 50
+
+
+###Compute size of the test set
+test_size_18c &lt;- ceiling(nrow(data_18c)*0.2)
+
+###Objects to store prediction performance
+r2_mvgblup_18c &lt;- matrix(as.numeric(NA), ncreps, ncol(data_18c))
+colnames(r2_mvgblup_18c) &lt;- colnames(data_18c)
+rownames(r2_mvgblup_18c) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+r2_gblup_18c &lt;- matrix(as.numeric(NA), ncreps, ncol(data_18c))
+colnames(r2_gblup_18c) &lt;- colnames(data_18c)
+rownames(r2_gblup_18c) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+
+###Objects to store heritability performance
+h2_mvgblup_18c &lt;- matrix(as.numeric(NA), ncreps, ncol(data_18c))
+colnames(h2_mvgblup_18c) &lt;- colnames(data_18c)
+rownames(h2_mvgblup_18c) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+h2_gblup_18c &lt;- matrix(as.numeric(NA), ncreps, ncol(data_18c))
+colnames(h2_gblup_18c) &lt;- colnames(data_18c)
+rownames(h2_gblup_18c) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+
+###Objects for the rg data
+female_18_male_18 &lt;- matrix(as.numeric(NA), ncreps, 1)
+
+###Cross-validation
+###Do crep=1 in console to do for loop line by line
+for(crep in 1:ncreps){
+  ###Sample individuals for the test set
+  testset_idx_18c &lt;- sort(sample(x=1:nrow(data_18c), size=test_size_18c, replace=FALSE))
+  testset_ids_18c &lt;- rownames(data_18c)[testset_idx_18c]
+  traingset_ids_18c &lt;- rownames(data_18c)[-testset_idx_18c]
+
+  ###Fit multivariate Bayesian GBLUP
+  GRMlist &lt;- list(Set1=GRM)
+  fit_mvg_18c &lt;- gbayes(y=data_18c[traingset_ids_18c, ], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+
+  ###Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_mvg_18c)!=0){
+    ##Extract the predictions
+    Yhat_mvgblup_18c &lt;- matrix(as.numeric(NA), nrow=length(testset_ids_18c), ncol=ncol(data_18c))##Changed as.numeric(NA) to traingset_ids
+    for(t in 1:ncol(data_18c)){
+      Yhat_mvgblup_18c[, t] &lt;- fit_mvg_18c$g[testset_ids_18c, t] + fit_mvg_18c$mu[t]
+    }
+    ##Compute accuracy
+    r2_mvgblup_18c[crep, ] &lt;- compute_accuracy(data_18c[testset_ids_18c, ], Yhat_mvgblup_18c)$r2
+  } else {
+    r2_mvgblup_18c[crep, ] &lt;- rep(NA, ncol(data_18c))
+    warning(paste0(&quot;Something went wrong in mvGBLUP in rep &quot;, crep, &quot;. Go back and check!&quot;))
+  }
+  ##Getting mv heritability matrix
+  if(length(fit_mvg_18c)!=0){
+    for(t in 1:ncol(data_18c)){
+      Yhat_mvgblup_18c[, t] &lt;- fit_mvg_18c$g[testset_ids_18c, t] + fit_mvg_18c$mu[t]
+    }
+    ##Compute accuracy
+    h2_mvgblup_18c[crep, ] &lt;- fit_mvg_18c$h2
+  } else {
+    h2_mvgblup_18c[crep, ] &lt;- rep(NA, ncol(data_18c))
+    warning(paste0(&quot;Something went wrong in mvGBLUP in rep &quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ###Fit univariate Bayesian GBLUP #1
+  fit_18c_1 &lt;- gbayes(y=data_18c[traingset_ids_18c, 1], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+  fit_gblup_y1_18c &lt;- fit_18c_1$mu+drop(fit_18c_1$g[testset_idx_18c])
+
+  ##Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_gblup_y1_18c) != 0){
+    ##Extract the predictions
+    yhat1_gblup_18c &lt;- fit_18c_1$g[testset_idx_18c] + fit_18c_1$mu
+
+    ##Compute accuracy
+    r2_gblup_18c[crep, 1] &lt;- compute_accuracy(data_18c[testset_ids_18c, 1, drop=FALSE], as.matrix(yhat1_gblup_18c, ncol=1))$r2
+  } else {
+    r2_gblup_18c[crep, 1] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y1 in rep&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ##Getting the list of heritability
+  if(length(fit_gblup_y1_18c) != 0){
+    ##Making Heritability matrix
+    h2_gblup_18c[crep, 1] &lt;- fit_18c_1$h2
+  } else {
+    h2_gblup_18c[crep, 1] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y1 in h2&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+
+  ###Fit univariate Bayesian GBLUP #2
+  fit_18c_2 &lt;- gbayes(y=data_18c[traingset_ids_18c, 2], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+  fit_gblup_y2_18c &lt;- fit_18c_2$mu+drop(fit_18c_2$g[testset_idx_18c])
+
+  ##Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_gblup_y2_18c) != 0){
+    ##Extract the predictions
+    yhat2_gblup_18c &lt;- fit_18c_2$g[testset_idx_18c] + fit_18c_2$mu
+
+    ##Compute accuracy
+    r2_gblup_18c[crep, 2] &lt;- compute_accuracy(data_18c[testset_ids_18c, 1, drop=FALSE], as.matrix(yhat2_gblup_18c, ncol=1))$r2
+  } else {
+    r2_gblup_18c[crep, 2] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y2 in rep&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ##Getting the list of heritability
+  if(length(fit_gblup_y2_18c) != 0){
+    ##Making Heritability matrix
+    h2_gblup_18c[crep, 2] &lt;- fit_18c_2$h2
+  } else {
+    h2_gblup_18c[crep, 2] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y2 in h2&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  rg &lt;- as.list(fit_mvg_18c[[&quot;rg&quot;]])
+  female_18_male_18[crep, ] &lt;- rg[[2]]
+
+  cat(&quot;Finished replicate&quot;, crep, &quot;\n&quot;)
+}
+
+
+##Puts resutls in a list matrix
+res_18c &lt;- list(r2_mvgblup_18c=r2_mvgblup_18c, h2_mvgblup_18c=h2_mvgblup_18c, r2_gblup_18c=r2_gblup_18c, h2_gblup_18c=h2_gblup_18c)
+
+res_rg &lt;- list(female_18_male_18=female_18_male_18)
+
+###Save results
+saveRDS(res_18c, &quot;/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_18c.rds&quot;)
+
+saveRDS(res_rg, &quot;/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_rg_18c.rds&quot;)</code></pre>
+</div>
+<div id="c-1" class="section level2">
+<h2>25C</h2>
+<pre class="r"><code>###Load libraries
+library(qgg)
+library(matrixStats)
+library(data.table)
+library(dplyr)
+
+###Set seed for random number generator
+set.seed(12)
+
+###Function to compute accuracy
+compute_accuracy &lt;- function(Y, Yhat) {
+  bias &lt;- rep(as.numeric(NA), ncol(Y))
+  r2 &lt;- rep(as.numeric(NA), ncol(Y))
+  rmse &lt;- rep(as.numeric(NA), ncol(Y))
+
+  for(i in 1:ncol(Y)){
+    fit_1  &lt;- lm(Y[, i] ~ Yhat[, i])
+    bias[i] &lt;- coef(fit_1)[2]
+    r2[i] &lt;- summary(fit_1)$r.squared
+    rmse[i] &lt;- sqrt(mean((Y[, i] - Yhat[, i])^2))
+  }
+  ##Calculation std dev of the columns
+  return(list(bias=bias, r2=r2, rmse=rmse, scaled_rmse=rmse/matrixStats::colSds(Y)))
+}
+
+
+###Get data from secretariat
+female_18c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/female_18c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Female_18c&quot;))
+female_25c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/female_25c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Female_25c&quot;))
+female_28c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/female_28c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Female_28c&quot;))
+
+###Merging data into female table
+female_data &lt;- merge(female_18c_mean_pheno, female_25c_mean_pheno,by=&quot;Line&quot;, all=TRUE)
+female_data &lt;- merge(female_data, female_28c_mean_pheno, by=&quot;Line&quot;, all=TRUE)
+female_data &lt;- na.omit(female_data)
+row.names(female_data) &lt;- female_data$Line
+female_data &lt;- female_data[,-1]
+
+###Get data from secretariat
+male_18c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/male_18c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Male_18c&quot;))
+male_25c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/male_25c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Male_25c&quot;))
+male_28c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/male_28c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Male_28c&quot;))
+
+###Merging into male table
+male_data &lt;- merge(male_18c_mean_pheno, male_25c_mean_pheno,by=&quot;Line&quot;, all=TRUE)
+male_data &lt;- merge(male_data, male_28c_mean_pheno, by=&quot;Line&quot;, all= TRUE)
+male_data &lt;- na.omit(male_data)
+row.names(male_data) &lt;- male_data$Line
+male_data &lt;- male_data[,-1]
+
+
+###Need to make table with female and male 25c
+data_25c &lt;- merge(female_data, male_data, by = 0)
+row.names(data_25c) &lt;- data_25c[,1]
+data_25c &lt;- data_25c[,-1]
+data_25c &lt;- subset(data_25c, select = -c(1,3,4,6))
+
+
+###Reading in genotype data and transposing, combine with phenotype data and removed NA rows
+dgrp_genotype &lt;- fread(&quot;/data/morgante_lab/data/dgrp/genotypes/dgrp2_tgeno_filtered_meanimputed.txt&quot;, header = TRUE, data.table=FALSE, nThread = 2)
+rownames(dgrp_genotype) &lt;- dgrp_genotype[, 1]
+dgrp_genotype &lt;- dgrp_genotype[, -1]
+dgrp_genotype &lt;- t(dgrp_genotype)
+###Aligning dgrp to number of observations with phenotypes
+dgrp_genotype &lt;- dgrp_genotype[rownames(data_25c), ]
+
+
+###Making phenotyp tables Matrices
+data_25c &lt;- as.matrix(data_25c)
+
+###Compute GRM
+W &lt;- scale(dgrp_genotype, center=TRUE, scale=TRUE)
+GRM &lt;- tcrossprod(W)/ncol(W)
+
+###Set number of replicates
+ncreps &lt;- 50
+
+
+###Compute size of the test set
+test_size_25c &lt;- ceiling(nrow(data_25c)*0.2)
+
+###Objects to store prediction performance
+r2_mvgblup_25c &lt;- matrix(as.numeric(NA), ncreps, ncol(data_25c))
+colnames(r2_mvgblup_25c) &lt;- colnames(data_25c)
+rownames(r2_mvgblup_25c) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+r2_gblup_25c &lt;- matrix(as.numeric(NA), ncreps, ncol(data_25c))
+colnames(r2_gblup_25c) &lt;- colnames(data_25c)
+rownames(r2_gblup_25c) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+
+###Objects to store heritability performance
+h2_mvgblup_25c &lt;- matrix(as.numeric(NA), ncreps, ncol(data_25c))
+colnames(h2_mvgblup_25c) &lt;- colnames(data_25c)
+rownames(h2_mvgblup_25c) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+h2_gblup_25c &lt;- matrix(as.numeric(NA), ncreps, ncol(data_25c))
+colnames(h2_gblup_25c) &lt;- colnames(data_25c)
+rownames(h2_gblup_25c) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+
+###Objects for the rg data
+female_25_male_25 &lt;- matrix(as.numeric(NA), ncreps, 1)
+
+###Cross-validation
+###Do crep=1 in console to do for loop line by line
+for(crep in 1:ncreps){
+  ###Sample individuals for the test set
+  testset_idx_25c &lt;- sort(sample(x=1:nrow(data_25c), size=test_size_25c, replace=FALSE))
+  testset_ids_25c &lt;- rownames(data_25c)[testset_idx_25c]
+  traingset_ids_25c &lt;- rownames(data_25c)[-testset_idx_25c]
+
+  ###Fit multivariate Bayesian GBLUP
+  GRMlist &lt;- list(Set1=GRM)
+  fit_mvg_25c &lt;- gbayes(y=data_25c[traingset_ids_25c, ], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+
+  ###Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_mvg_25c)!=0){
+    ##Extract the predictions
+    Yhat_mvgblup_25c &lt;- matrix(as.numeric(NA), nrow=length(testset_ids_25c), ncol=ncol(data_25c))##Changed as.numeric(NA) to traingset_ids
+    for(t in 1:ncol(data_25c)){
+      Yhat_mvgblup_25c[, t] &lt;- fit_mvg_25c$g[testset_ids_25c, t] + fit_mvg_25c$mu[t]
+    }
+    ##Compute accuracy
+    r2_mvgblup_25c[crep, ] &lt;- compute_accuracy(data_25c[testset_ids_25c, ], Yhat_mvgblup_25c)$r2
+  } else {
+    r2_mvgblup_25c[crep, ] &lt;- rep(NA, ncol(data_25c))
+    warning(paste0(&quot;Something went wrong in mvGBLUP in rep &quot;, crep, &quot;. Go back and check!&quot;))
+  }
+  ##Getting mv heritability matrix
+  if(length(fit_mvg_25c)!=0){
+    for(t in 1:ncol(data_25c)){
+      Yhat_mvgblup_25c[, t] &lt;- fit_mvg_25c$g[testset_ids_25c, t] + fit_mvg_25c$mu[t]
+    }
+    ##Compute accuracy
+    h2_mvgblup_25c[crep, ] &lt;- fit_mvg_25c$h2
+  } else {
+    h2_mvgblup_25c[crep, ] &lt;- rep(NA, ncol(data_25c))
+    warning(paste0(&quot;Something went wrong in mvGBLUP in rep &quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ###Fit univariate Bayesian GBLUP #1
+  fit_25c_1 &lt;- gbayes(y=data_25c[traingset_ids_25c, 1], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+  fit_gblup_y1_25c &lt;- fit_25c_1$mu+drop(fit_25c_1$g[testset_idx_25c])
+
+  ##Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_gblup_y1_25c) != 0){
+    ##Extract the predictions
+    yhat1_gblup_25c &lt;- fit_25c_1$g[testset_idx_25c] + fit_25c_1$mu
+
+    ##Compute accuracy
+    r2_gblup_25c[crep, 1] &lt;- compute_accuracy(data_25c[testset_ids_25c, 1, drop=FALSE], as.matrix(yhat1_gblup_25c, ncol=1))$r2
+  } else {
+    r2_gblup_25c[crep, 1] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y1 in rep&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ##Getting the list of heritability
+  if(length(fit_gblup_y1_25c) != 0){
+    ##Making Heritability matrix
+    h2_gblup_25c[crep, 1] &lt;- fit_25c_1$h2
+  } else {
+    h2_gblup_25c[crep, 1] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y1 in h2&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+
+  ###Fit univariate Bayesian GBLUP #2
+  fit_25c_2 &lt;- gbayes(y=data_25c[traingset_ids_25c, 2], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+  fit_gblup_y2_25c &lt;- fit_25c_2$mu+drop(fit_25c_2$g[testset_idx_25c])
+
+  ##Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_gblup_y2_25c) != 0){
+    ##Extract the predictions
+    yhat2_gblup_25c &lt;- fit_25c_2$g[testset_idx_25c] + fit_25c_2$mu
+
+    ##Compute accuracy
+    r2_gblup_25c[crep, 2] &lt;- compute_accuracy(data_25c[testset_ids_25c, 1, drop=FALSE], as.matrix(yhat2_gblup_25c, ncol=1))$r2
+  } else {
+    r2_gblup_25c[crep, 2] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y2 in rep&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ##Getting the list of heritability
+  if(length(fit_gblup_y2_25c) != 0){
+    ##Making Heritability matrix
+    h2_gblup_25c[crep, 2] &lt;- fit_25c_2$h2
+  } else {
+    h2_gblup_25c[crep, 2] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y2 in h2&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  rg &lt;- as.list(fit_mvg_25c[[&quot;rg&quot;]])
+  female_25_male_25[crep, ] &lt;- rg[[2]]
+
+  cat(&quot;Finished replicate&quot;, crep, &quot;\n&quot;)
+}
+
+
+
+##Puts resutls in a list matrix
+res_25c &lt;- list(r2_mvgblup_25c=r2_mvgblup_25c, h2_mvgblup_25c=h2_mvgblup_25c, r2_gblup_25c=r2_gblup_25c, h2_gblup_25c=h2_gblup_25c)
+
+res_rg &lt;- list(female_25_male_25=female_25_male_25)
+
+###Save results
+saveRDS(res_25c, &quot;/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_25c.rds&quot;)
+
+saveRDS(res_rg, &quot;/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_rg_25c.rds&quot;)</code></pre>
+</div>
+<div id="c-2" class="section level2">
+<h2>28C</h2>
+<pre class="r"><code>###Load libraries
+library(qgg)
+library(matrixStats)
+library(data.table)
+library(dplyr)
+
+###Set seed for random number generator
+set.seed(12)
+
+###Function to compute accuracy
+compute_accuracy &lt;- function(Y, Yhat) {
+  bias &lt;- rep(as.numeric(NA), ncol(Y))
+  r2 &lt;- rep(as.numeric(NA), ncol(Y))
+  rmse &lt;- rep(as.numeric(NA), ncol(Y))
+
+  for(i in 1:ncol(Y)){
+    fit_1  &lt;- lm(Y[, i] ~ Yhat[, i])
+    bias[i] &lt;- coef(fit_1)[2]
+    r2[i] &lt;- summary(fit_1)$r.squared
+    rmse[i] &lt;- sqrt(mean((Y[, i] - Yhat[, i])^2))
+  }
+  ##Calculation std dev of the columns
+  return(list(bias=bias, r2=r2, rmse=rmse, scaled_rmse=rmse/matrixStats::colSds(Y)))
+}
+
+
+###Get data from secretariat
+female_18c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/female_18c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Female_18c&quot;))
+female_25c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/female_25c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Female_25c&quot;))
+female_28c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/female_28c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Female_28c&quot;))
+
+###Merging data into female table
+female_data &lt;- merge(female_18c_mean_pheno, female_25c_mean_pheno,by=&quot;Line&quot;, all=TRUE)
+female_data &lt;- merge(female_data, female_28c_mean_pheno, by=&quot;Line&quot;, all=TRUE)
+female_data &lt;- na.omit(female_data)
+row.names(female_data) &lt;- female_data$Line
+female_data &lt;- female_data[,-1]
+
+###Get data from secretariat
+male_18c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/male_18c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Male_18c&quot;))
+male_25c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/male_25c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Male_25c&quot;))
+male_28c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/male_28c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Male_28c&quot;))
+
+###Merging into male table
+male_data &lt;- merge(male_18c_mean_pheno, male_25c_mean_pheno,by=&quot;Line&quot;, all=TRUE)
+male_data &lt;- merge(male_data, male_28c_mean_pheno, by=&quot;Line&quot;, all= TRUE)
+male_data &lt;- na.omit(male_data)
+row.names(male_data) &lt;- male_data$Line
+male_data &lt;- male_data[,-1]
+
+
+###Need to make table with female and male 28c
+data_28c &lt;- merge(female_data, male_data, by = 0)
+row.names(data_28c) &lt;- data_28c[,1]
+data_28c &lt;- data_28c[,-1]
+data_28c &lt;- subset(data_28c, select = -c(1,2,4,5))
+
+
+###Reading in genotype data and transposing, combine with phenotype data and removed NA rows
+dgrp_genotype &lt;- fread(&quot;/data/morgante_lab/data/dgrp/genotypes/dgrp2_tgeno_filtered_meanimputed.txt&quot;, header = TRUE, data.table=FALSE, nThread = 2)
+rownames(dgrp_genotype) &lt;- dgrp_genotype[, 1]
+dgrp_genotype &lt;- dgrp_genotype[, -1]
+dgrp_genotype &lt;- t(dgrp_genotype)
+###Aligning dgrp to number of observations with phenotypes
+dgrp_genotype &lt;- dgrp_genotype[rownames(data_28c), ]
+
+
+###Making phenotyp tables Matrices
+data_28c &lt;- as.matrix(data_28c)
+
+###Compute GRM
+W &lt;- scale(dgrp_genotype, center=TRUE, scale=TRUE)
+GRM &lt;- tcrossprod(W)/ncol(W)
+
+###Set number of replicates
+ncreps &lt;- 50
+
+
+###Compute size of the test set
+test_size_28c &lt;- ceiling(nrow(data_28c)*0.2)
+
+###Objects to store prediction performance
+r2_mvgblup_28c &lt;- matrix(as.numeric(NA), ncreps, ncol(data_28c))
+colnames(r2_mvgblup_28c) &lt;- colnames(data_28c)
+rownames(r2_mvgblup_28c) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+r2_gblup_28c &lt;- matrix(as.numeric(NA), ncreps, ncol(data_28c))
+colnames(r2_gblup_28c) &lt;- colnames(data_28c)
+rownames(r2_gblup_28c) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+
+###Objects to store heritability performance
+h2_mvgblup_28c &lt;- matrix(as.numeric(NA), ncreps, ncol(data_28c))
+colnames(h2_mvgblup_28c) &lt;- colnames(data_28c)
+rownames(h2_mvgblup_28c) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+h2_gblup_28c &lt;- matrix(as.numeric(NA), ncreps, ncol(data_28c))
+colnames(h2_gblup_28c) &lt;- colnames(data_28c)
+rownames(h2_gblup_28c) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+
+###Objects for the rg data
+female_28_male_28 &lt;- matrix(as.numeric(NA), ncreps, 1)
+
+###Cross-validation
+###Do crep=1 in console to do for loop line by line
+for(crep in 1:ncreps){
+  ###Sample individuals for the test set
+  testset_idx_28c &lt;- sort(sample(x=1:nrow(data_28c), size=test_size_28c, replace=FALSE))
+  testset_ids_28c &lt;- rownames(data_28c)[testset_idx_28c]
+  traingset_ids_28c &lt;- rownames(data_28c)[-testset_idx_28c]
+
+  ###Fit multivariate Bayesian GBLUP
+  GRMlist &lt;- list(Set1=GRM)
+  fit_mvg_28c &lt;- gbayes(y=data_28c[traingset_ids_28c, ], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+
+  ###Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_mvg_28c)!=0){
+    ##Extract the predictions
+    Yhat_mvgblup_28c &lt;- matrix(as.numeric(NA), nrow=length(testset_ids_28c), ncol=ncol(data_28c))##Changed as.numeric(NA) to traingset_ids
+    for(t in 1:ncol(data_28c)){
+      Yhat_mvgblup_28c[, t] &lt;- fit_mvg_28c$g[testset_ids_28c, t] + fit_mvg_28c$mu[t]
+    }
+    ##Compute accuracy
+    r2_mvgblup_28c[crep, ] &lt;- compute_accuracy(data_28c[testset_ids_28c, ], Yhat_mvgblup_28c)$r2
+  } else {
+    r2_mvgblup_28c[crep, ] &lt;- rep(NA, ncol(data_28c))
+    warning(paste0(&quot;Something went wrong in mvGBLUP in rep &quot;, crep, &quot;. Go back and check!&quot;))
+  }
+  ##Getting mv heritability matrix
+  if(length(fit_mvg_28c)!=0){
+    for(t in 1:ncol(data_28c)){
+      Yhat_mvgblup_28c[, t] &lt;- fit_mvg_28c$g[testset_ids_28c, t] + fit_mvg_28c$mu[t]
+    }
+    ##Compute accuracy
+    h2_mvgblup_28c[crep, ] &lt;- fit_mvg_28c$h2
+  } else {
+    h2_mvgblup_28c[crep, ] &lt;- rep(NA, ncol(data_28c))
+    warning(paste0(&quot;Something went wrong in mvGBLUP in rep &quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ###Fit univariate Bayesian GBLUP #1
+  fit_28c_1 &lt;- gbayes(y=data_28c[traingset_ids_28c, 1], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+  fit_gblup_y1_28c &lt;- fit_28c_1$mu+drop(fit_28c_1$g[testset_idx_28c])
+
+  ##Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_gblup_y1_28c) != 0){
+    ##Extract the predictions
+    yhat1_gblup_28c &lt;- fit_28c_1$g[testset_idx_28c] + fit_28c_1$mu
+
+    ##Compute accuracy
+    r2_gblup_28c[crep, 1] &lt;- compute_accuracy(data_28c[testset_ids_28c, 1, drop=FALSE], as.matrix(yhat1_gblup_28c, ncol=1))$r2
+  } else {
+    r2_gblup_28c[crep, 1] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y1 in rep&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ##Getting the list of heritability
+  if(length(fit_gblup_y1_28c) != 0){
+    ##Making Heritability matrix
+    h2_gblup_28c[crep, 1] &lt;- fit_28c_1$h2
+  } else {
+    h2_gblup_28c[crep, 1] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y1 in h2&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+
+  ###Fit univariate Bayesian GBLUP #2
+  fit_28c_2 &lt;- gbayes(y=data_28c[traingset_ids_28c, 2], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+  fit_gblup_y2_28c &lt;- fit_28c_2$mu+drop(fit_28c_2$g[testset_idx_28c])
+
+  ##Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_gblup_y2_28c) != 0){
+    ##Extract the predictions
+    yhat2_gblup_28c &lt;- fit_28c_2$g[testset_idx_28c] + fit_28c_2$mu
+
+    ##Compute accuracy
+    r2_gblup_28c[crep, 2] &lt;- compute_accuracy(data_28c[testset_ids_28c, 1, drop=FALSE], as.matrix(yhat2_gblup_28c, ncol=1))$r2
+  } else {
+    r2_gblup_28c[crep, 2] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y2 in rep&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ##Getting the list of heritability
+  if(length(fit_gblup_y2_28c) != 0){
+    ##Making Heritability matrix
+    h2_gblup_28c[crep, 2] &lt;- fit_28c_2$h2
+  } else {
+    h2_gblup_28c[crep, 2] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y2 in h2&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  rg &lt;- as.list(fit_mvg_28c[[&quot;rg&quot;]])
+  female_28_male_28[crep, ] &lt;- rg[[2]]
+
+  cat(&quot;Finished replicate&quot;, crep, &quot;\n&quot;)
+}
+
+
+
+##Puts resutls in a list matrix
+res_28c &lt;- list(r2_mvgblup_28c=r2_mvgblup_28c, h2_mvgblup_28c=h2_mvgblup_28c, r2_gblup_28c=r2_gblup_28c, h2_gblup_28c=h2_gblup_28c)
+
+res_rg &lt;- list(female_28_male_28=female_28_male_28)
+
+###Save results
+saveRDS(res_28c, &quot;/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_28c.rds&quot;)
+
+saveRDS(res_rg, &quot;/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_rg_28c.rds&quot;)</code></pre>
+</div>
+<div id="all-data-analysis" class="section level2">
+<h2>All data analysis</h2>
+<pre class="r"><code>###Load libraries
+library(qgg)
+library(matrixStats)
+library(data.table)
+library(dplyr)
+
+###Set seed for random number generator
+set.seed(12)
+
+###Function to compute accuracy
+compute_accuracy &lt;- function(Y, Yhat) {
+  bias &lt;- rep(as.numeric(NA), ncol(Y))
+  r2 &lt;- rep(as.numeric(NA), ncol(Y))
+  rmse &lt;- rep(as.numeric(NA), ncol(Y))
+
+  for(i in 1:ncol(Y)){
+    fit_1  &lt;- lm(Y[, i] ~ Yhat[, i])
+    bias[i] &lt;- coef(fit_1)[2]
+    r2[i] &lt;- summary(fit_1)$r.squared
+    rmse[i] &lt;- sqrt(mean((Y[, i] - Yhat[, i])^2))
+  }
+  ##Calculation std dev of the columns
+  return(list(bias=bias, r2=r2, rmse=rmse, scaled_rmse=rmse/matrixStats::colSds(Y)))
+}
+
+
+###Get data from secretariat
+female_18c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/female_18c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Female_18c&quot;))
+female_25c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/female_25c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Female_25c&quot;))
+female_28c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/female_28c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Female_28c&quot;))
+
+###Merging data into female table
+female_data &lt;- merge(female_18c_mean_pheno, female_25c_mean_pheno,by=&quot;Line&quot;, all=TRUE)
+female_data &lt;- merge(female_data, female_28c_mean_pheno, by=&quot;Line&quot;, all=TRUE)
+female_data &lt;- na.omit(female_data)
+row.names(female_data) &lt;- female_data$Line
+female_data &lt;- female_data[,-1]
+
+
+###Get data from secretariat
+male_18c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/male_18c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Male_18c&quot;))
+male_25c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/male_25c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Male_25c&quot;))
+male_28c_mean_pheno &lt;- read.delim(&quot;/data/morgante_lab/data/dgrp/phenotypes/lifespan/male_28c_mean_pheno.txt&quot;, header=FALSE, col.names=c(&quot;Line&quot;,&quot;Male_28c&quot;))
+
+###Merging into male table
+male_data &lt;- merge(male_18c_mean_pheno, male_25c_mean_pheno,by=&quot;Line&quot;, all=TRUE)
+male_data &lt;- merge(male_data, male_28c_mean_pheno, by=&quot;Line&quot;, all= TRUE)
+male_data &lt;- na.omit(male_data)
+row.names(male_data) &lt;- male_data$Line
+male_data &lt;- male_data[,-1]
+
+
+###Merging Male and Female tables
+all_data &lt;- merge(female_data, male_data, by=0)
+row.names(all_data) &lt;- all_data[,1]
+all_data &lt;- all_data[,-1]
+
+###Reading in genotype data and transposing, combine with phenotype data and removed NA rows
+dgrp_genotype &lt;- fread(&quot;/data/morgante_lab/data/dgrp/genotypes/dgrp2_tgeno_filtered_meanimputed.txt&quot;, header = TRUE, data.table=FALSE, nThread = 2)
+rownames(dgrp_genotype) &lt;- dgrp_genotype[, 1]
+dgrp_genotype &lt;- dgrp_genotype[, -1]
+dgrp_genotype &lt;- t(dgrp_genotype)
+
+dgrp_genotype &lt;- dgrp_genotype[rownames(all_data), ]
+
+
+###Making phenotyp tables Matrices
+all_data &lt;- as.matrix(all_data)
+
+###Compute GRM
+W &lt;- scale(dgrp_genotype, center=TRUE, scale=TRUE)
+GRM &lt;- tcrossprod(W)/ncol(W)
+
+###Set number of replicates
+ncreps &lt;- 50
+
+
+###Compute size of the test set
+test_size &lt;- ceiling(nrow(all_data)*0.2)
+
+###Objects to store prediction performance
+r2_mvgblup &lt;- matrix(as.numeric(NA), ncreps, ncol(all_data))
+colnames(r2_mvgblup) &lt;- colnames(all_data)
+rownames(r2_mvgblup) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+r2_gblup &lt;- matrix(as.numeric(NA), ncreps, ncol(all_data))
+colnames(r2_gblup) &lt;- colnames(all_data)
+rownames(r2_gblup) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+
+###Objects to store heritability performance
+h2_mvgblup &lt;- matrix(as.numeric(NA), ncreps, ncol(all_data))
+colnames(h2_mvgblup) &lt;- colnames(all_data)
+rownames(h2_mvgblup) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+h2_gblup &lt;- matrix(as.numeric(NA), ncreps, ncol(all_data))
+colnames(h2_gblup) &lt;- colnames(all_data)
+rownames(h2_gblup) &lt;- paste0(&quot;rep&quot;, 1:ncreps)
+
+###Objects for the rg data
+female_18_female_25 &lt;- matrix(as.numeric(NA), ncreps, 1)
+female_18_female_28 &lt;- matrix(as.numeric(NA), ncreps, 1)
+female_18_male_18 &lt;- matrix(as.numeric(NA), ncreps, 1)
+female_18_male_25 &lt;- matrix(as.numeric(NA), ncreps, 1)
+female_18_male_28 &lt;- matrix(as.numeric(NA), ncreps, 1)
+female_25_female_28 &lt;- matrix(as.numeric(NA), ncreps, 1)
+female_25_male_18 &lt;- matrix(as.numeric(NA), ncreps, 1)
+female_25_male_25 &lt;- matrix(as.numeric(NA), ncreps, 1)
+female_25_male_28 &lt;- matrix(as.numeric(NA), ncreps, 1)
+female_28_male_18 &lt;- matrix(as.numeric(NA), ncreps, 1)
+female_28_male_25 &lt;- matrix(as.numeric(NA), ncreps, 1)
+female_28_male_28 &lt;- matrix(as.numeric(NA), ncreps, 1)
+male_18_male_25 &lt;- matrix(as.numeric(NA), ncreps, 1)
+male_18_male_28 &lt;- matrix(as.numeric(NA), ncreps, 1)
+male_25_male_28 &lt;- matrix(as.numeric(NA), ncreps, 1)
+
+
+###Cross-validation
+###Do crep=1 in console to do for loop line by line
+for(crep in 1:ncreps){
+  ###Sample individuals for the test set
+  testset_idx &lt;- sort(sample(x=1:nrow(all_data), size=test_size, replace=FALSE))
+  testset_ids &lt;- rownames(all_data)[testset_idx]
+  traingset_ids &lt;- rownames(all_data)[-testset_idx]
+
+  ###Fit multivariate Bayesian GBLUP
+  GRMlist &lt;- list(Set1=GRM)
+  fit_mvg &lt;- gbayes(y=all_data[traingset_ids, ], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+
+  ###Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_mvg)!=0){
+    ##Extract the predictions
+    Yhat_mvgblup &lt;- matrix(as.numeric(NA), nrow=length(testset_ids), ncol=ncol(all_data))##Changed as.numeric(NA) to traingset_ids
+    for(t in 1:ncol(all_data)){
+      Yhat_mvgblup[, t] &lt;- fit_mvg$g[testset_ids, t] + fit_mvg$mu[t]
+    }
+    ##Compute accuracy
+    r2_mvgblup[crep, ] &lt;- compute_accuracy(all_data[testset_ids, ], Yhat_mvgblup)$r2
+  } else {
+    r2_mvgblup[crep, ] &lt;- rep(NA, ncol(all_data))
+    warning(paste0(&quot;Something went wrong in mvGBLUP in rep &quot;, crep, &quot;. Go back and check!&quot;))
+  }
+  ##Getting mv heritability matrix
+  if(length(fit_mvg)!=0){
+    for(t in 1:ncol(all_data)){
+      Yhat_mvgblup[, t] &lt;- fit_mvg$g[testset_ids, t] + fit_mvg$mu[t]
+    }
+    ##Compute accuracy
+    h2_mvgblup[crep, ] &lt;- fit_mvg$h2
+  } else {
+    h2_mvgblup[crep, ] &lt;- rep(NA, ncol(all_data))
+    warning(paste0(&quot;Something went wrong in mvGBLUP in rep &quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ###Fit univariate Bayesian GBLUP #1
+  fit_1 &lt;- gbayes(y=all_data[traingset_ids, 1], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+  fit_gblup_y1 &lt;- fit_1$mu+drop(fit_1$g[testset_idx])
+
+  ##Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_gblup_y1) != 0){
+    ##Extract the predictions
+    yhat1_gblup &lt;- fit_1$g[testset_idx] + fit_1$mu
+
+    ##Compute accuracy
+    r2_gblup[crep, 1] &lt;- compute_accuracy(all_data[testset_ids, 1, drop=FALSE], as.matrix(yhat1_gblup, ncol=1))$r2
+  } else {
+    r2_gblup[crep, 1] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y1 in rep&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ##Getting the list of heritability
+  if(length(fit_gblup_y1) != 0){
+    ##Making Heritability matrix
+    h2_gblup[crep, 1] &lt;- fit_1$h2
+  } else {
+    h2_gblup[crep, 1] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y1 in h2&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+
+  ###Fit univariate Bayesian GBLUP #2
+  fit_2 &lt;- gbayes(y=all_data[traingset_ids, 2], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+  fit_gblup_y2 &lt;- fit_2$mu+drop(fit_2$g[testset_idx])
+
+  ##Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_gblup_y2) != 0){
+    ##Extract the predictions
+    yhat2_gblup &lt;- fit_2$g[testset_idx] + fit_2$mu
+
+    ##Compute accuracy
+    r2_gblup[crep, 2] &lt;- compute_accuracy(all_data[testset_ids, 1, drop=FALSE], as.matrix(yhat2_gblup, ncol=1))$r2
+  } else {
+    r2_gblup[crep, 2] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y2 in rep&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ##Getting the list of heritability
+  if(length(fit_gblup_y2) != 0){
+    ##Making Heritability matrix
+    h2_gblup[crep, 2] &lt;- fit_2$h2
+  } else {
+    h2_gblup[crep, 2] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y2 in h2&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+
+  ###Fit univariate Bayesian GBLUP #3
+  fit_3 &lt;- gbayes(y=all_data[traingset_ids, 3], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+  fit_gblup_y3 &lt;- fit_3$mu+drop(fit_3$g[testset_idx])
+
+  ##Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_gblup_y3) != 0){
+    ##Extract the predictions
+    yhat3_gblup &lt;- fit_3$g[testset_idx] + fit_3$mu
+
+    ##Compute accuracy
+    r2_gblup[crep, 3] &lt;- compute_accuracy(all_data[testset_ids, 1, drop=FALSE], as.matrix(yhat3_gblup, ncol=1))$r2
+  } else {
+    r2_gblup[crep, 3] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y3 in rep&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ##Getting the list of heritability
+  if(length(fit_gblup_y3) != 0){
+    ##Making Heritability matrix
+    h2_gblup[crep, 3] &lt;- fit_3$h2
+  } else {
+    h2_gblup[crep, 3] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y3 in h2&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+
+  ###Fit univariate Bayesian GBLUP #4
+  fit_4 &lt;- gbayes(y=all_data[traingset_ids, 4], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+  fit_gblup_y4 &lt;- fit_4$mu+drop(fit_4$g[testset_idx])
+
+  ##Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_gblup_y4) != 0){
+    ##Extract the predictions
+    yhat4_gblup &lt;- fit_4$g[testset_idx] + fit_4$mu
+
+    ##Compute accuracy
+    r2_gblup[crep, 4] &lt;- compute_accuracy(all_data[testset_ids, 1, drop=FALSE], as.matrix(yhat4_gblup, ncol=1))$r2
+  } else {
+    r2_gblup[crep, 4] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y4 in rep&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ##Getting the list of heritability
+  if(length(fit_gblup_y4) != 0){
+    ##Making Heritability matrix
+    h2_gblup[crep, 4] &lt;- fit_4$h2
+  } else {
+    h2_gblup[crep, 4] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y4 in h2&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ###Fit univariate Bayesian GBLUP #5
+  fit_5 &lt;- gbayes(y=all_data[traingset_ids, 5], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+  fit_gblup_y5 &lt;- fit_5$mu+drop(fit_5$g[testset_idx])
+
+  ##Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_gblup_y5) != 0){
+    ##Extract the predictions
+    yhat5_gblup &lt;- fit_5$g[testset_idx] + fit_5$mu
+
+    ##Compute accuracy
+    r2_gblup[crep, 5] &lt;- compute_accuracy(all_data[testset_ids, 1, drop=FALSE], as.matrix(yhat5_gblup, ncol=1))$r2
+  } else {
+    r2_gblup[crep, 5] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y5 in rep&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ##Getting the list of heritability
+  if(length(fit_gblup_y5) != 0){
+    ##Making Heritability matrix
+    h2_gblup[crep, 5] &lt;- fit_5$h2
+  } else {
+    h2_gblup[crep, 5] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y5 in h2&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ###Fit univariate Bayesian GBLUP #6
+  fit_6 &lt;- gbayes(y=all_data[traingset_ids, 6], GRMlist=GRMlist, nit=1000, nburn=500, verbose=FALSE)
+  fit_gblup_y6 &lt;- fit_6$mu+drop(fit_6$g[testset_idx])
+
+  ##Check that no error happened (unfortunately the sommer authors did not use the proper stop() and that REML converged)
+  if(length(fit_gblup_y6) != 0){
+    ##Extract the predictions
+    yhat6_gblup &lt;- fit_6$g[testset_idx] + fit_6$mu
+
+    ##Compute accuracy
+    r2_gblup[crep, 6] &lt;- compute_accuracy(all_data[testset_ids, 1, drop=FALSE], as.matrix(yhat6_gblup, ncol=1))$r2
+  } else {
+    r2_gblup[crep, 6] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y6 in rep&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  ##Getting the list of heritability
+  if(length(fit_gblup_y6) != 0){
+    ##Making Heritability matrix
+    h2_gblup[crep, 6] &lt;- fit_6$h2
+  } else {
+    h2_gblup[crep, 6] &lt;- NA
+    warning(paste0(&quot;Something went wrong in GBLUP for y6 in h2&quot;, crep, &quot;. Go back and check!&quot;))
+  }
+
+  rg &lt;- as.list(fit_mvg[[&quot;rg&quot;]])
+  female_18_female_25[crep, ] &lt;- rg[[2]]
+  female_18_female_28[crep, ] &lt;- rg[[3]]
+  female_18_male_18[crep, ] &lt;- rg[[4]]
+  female_18_male_25[crep, ] &lt;- rg[[5]]
+  female_18_male_28[crep, ] &lt;- rg[[6]]
+  female_25_female_28[crep, ] &lt;- rg[[9]]
+  female_25_male_18[crep, ] &lt;- rg[[10]]
+  female_25_male_25[crep, ] &lt;- rg[[11]]
+  female_25_male_28[crep, ] &lt;- rg[[12]]
+  female_28_male_18[crep, ] &lt;- rg[[16]]
+  female_28_male_25[crep, ] &lt;- rg[[17]]
+  female_28_male_28[crep, ] &lt;- rg[[18]]
+  male_18_male_25[crep, ] &lt;- rg[[23]]
+  male_18_male_28[crep, ] &lt;- rg[[24]]
+  male_25_male_28[crep, ] &lt;- rg[[30]]
+
+  cat(&quot;Finished replicate&quot;, crep, &quot;\n&quot;)
+}
+
+
+
+##Puts resutls in a list matrix
+res_all &lt;- list(h2_gblup=h2_gblup, h2_mvgblup=h2_mvgblup, r2_gblup=r2_gblup, r2_mvgblup=r2_mvgblup)
+
+res_rg &lt;- list(female_18_female_25=female_18_female_25,
+               female_18_female_28=female_18_female_28,
+               female_18_male_18=female_18_male_18,
+               female_18_male_25=female_18_male_25,
+               female_18_male_28=female_18_male_28,
+               female_25_female_28=female_25_female_28,
+               female_25_male_18=female_25_male_18,
+               female_25_male_25=female_25_male_25,
+               female_25_male_28=female_25_male_28,
+               female_28_male_18=female_28_male_18,
+               female_28_male_25=female_28_male_25,
+               female_28_male_28=female_28_male_28,
+               male_18_male_25=male_18_male_25,
+               male_18_male_28=male_18_male_28,
+               male_25_male_28=male_25_male_28)
+
+###Save results
+saveRDS(res_all, &quot;/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_all.rds&quot;)
+
+saveRDS(res_rg, &quot;/data/morgante_lab/kcoyne/mv_project/results/gblup_vs_mvgblup_drosophila_rg.rds&quot;)</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.0.3 (2020-10-10)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: CentOS Linux 7 (Core)
+
+Matrix products: default
+BLAS/LAPACK: /opt/ohpc/pub/Software/openblas_0.3.10/lib/libopenblas_haswellp-r0.3.10.dev.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] workflowr_1.7.0
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.8       bslib_0.3.1      compiler_4.0.3   pillar_1.6.4    
+ [5] later_1.3.0      git2r_0.29.0     jquerylib_0.1.4  tools_4.0.3     
+ [9] getPass_0.2-2    digest_0.6.29    jsonlite_1.7.3   evaluate_0.14   
+[13] tibble_3.1.6     lifecycle_1.0.1  pkgconfig_2.0.3  rlang_1.0.1     
+[17] cli_3.1.1        rstudioapi_0.13  yaml_2.2.2       xfun_0.29       
+[21] fastmap_1.1.0    httr_1.4.2       stringr_1.4.0    knitr_1.37      
+[25] sass_0.4.0       fs_1.5.2         vctrs_0.3.8      rprojroot_2.0.2 
+[29] glue_1.6.0       R6_2.5.1         processx_3.5.2   fansi_1.0.2     
+[33] rmarkdown_2.11   callr_3.7.0      magrittr_2.0.2   whisker_0.4     
+[37] ps_1.6.0         promises_1.2.0.1 htmltools_0.5.2  ellipsis_0.3.2  
+[41] httpuv_1.6.5     utf8_1.2.2       stringi_1.7.6    crayon_1.4.2    </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
